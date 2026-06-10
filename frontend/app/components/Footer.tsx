@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 const NAV_COL = {
   "Explore": ["The Retreat", "Experiences", "Accommodation"],
@@ -12,14 +14,30 @@ const NAV_COL = {
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const toggleGroup = (group: string) => {
+    setExpanded((prev) => ({
+      ...prev,
+      [group]: !prev[group],
+    }));
+  };
 
   return (
     <footer className="bg-[#1a2e22] border-t border-white/8">
       <div className="container-luxury">
         {/* Top */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 lg:gap-8 py-14 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-8 md:gap-10 lg:gap-8 py-10 md:py-16">
           {/* Brand */}
-          <div>
+          <div className="mb-6 md:mb-0">
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-5">
               <Image
@@ -42,7 +60,13 @@ export default function Footer() {
             {/* Socials */}
             <div className="flex gap-3">
               {/* Instagram */}
-              <a href="#" aria-label="Instagram" className="w-8 h-8 border border-white/15 flex items-center justify-center text-white/40 hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300">
+              <a
+                href="https://www.instagram.com/hakki_goodu?igsh=MzR3dGMya2d4ZGhj"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-8 h-8 border border-white/15 flex items-center justify-center text-white/40 hover:text-[#C9A96E] hover:border-[#C9A96E]/50 transition-all duration-300"
+              >
                 <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
                 </svg>
@@ -67,25 +91,53 @@ export default function Footer() {
           </div>
 
           {/* Nav Columns */}
-          {Object.entries(NAV_COL).map(([group, links]) => (
-            <div key={group}>
-              <p className="text-[0.6rem] tracking-[0.4em] uppercase text-[#C9A96E] font-medium mb-5">
-                {group}
-              </p>
-              <ul className="flex flex-col gap-3">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-xs text-white/35 hover:text-white/75 transition-colors duration-300"
+          {Object.entries(NAV_COL).map(([group, links]) => {
+            const isOpen = expanded[group];
+            return (
+              <div key={group} className="border-b border-white/5 md:border-none">
+                <button
+                  onClick={() => isMobile && toggleGroup(group)}
+                  className="w-full flex items-center justify-between text-left py-4 md:py-0 md:mb-5 focus:outline-none md:pointer-events-none cursor-pointer md:cursor-default"
+                >
+                  <span className="text-[0.65rem] tracking-[0.4em] uppercase text-[#C9A96E] font-semibold">
+                    {group}
+                  </span>
+                  {isMobile && (
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-[#C9A96E]"
                     >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                      <ChevronDown size={15} />
+                    </motion.span>
+                  )}
+                </button>
+
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: isMobile ? (isOpen ? "auto" : 0) : "auto",
+                    opacity: isMobile ? (isOpen ? 1 : 0) : 1,
+                  }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="overflow-hidden"
+                >
+                  <ul className="flex flex-col gap-3 pb-4 md:pb-0">
+                    {links.map((link) => (
+                      <li key={link}>
+                        <a
+                          href="#"
+                          className="text-xs text-white/35 hover:text-white/75 transition-colors duration-300"
+                        >
+                          {link}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Divider */}

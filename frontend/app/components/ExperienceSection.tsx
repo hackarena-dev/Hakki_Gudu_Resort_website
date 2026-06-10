@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 const EXPERIENCES = [
   {
@@ -58,7 +58,6 @@ const EXPERIENCES = [
 export default function ExperienceSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [active, setActive] = useState<string | null>(null);
 
   return (
     <section
@@ -78,7 +77,7 @@ export default function ExperienceSection() {
           <p className="section-label text-[#C9A96E] mb-4">Curated Moments</p>
           <h2
             className="text-4xl md:text-5xl font-bold text-white leading-tight"
-            style={{ fontFamily: "'Playfair Display', serif" }}
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             The Experiences That{" "}
             <em className="italic text-[#C9A96E]">Stay With You</em>
@@ -89,19 +88,17 @@ export default function ExperienceSection() {
         </motion.div>
 
         {/* Experience Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {EXPERIENCES.map((exp, i) => (
             <motion.div
               key={exp.id}
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.9, ease: "easeOut" as const }}
-              className="group relative overflow-hidden cursor-pointer"
-              onMouseEnter={() => setActive(exp.id)}
-              onMouseLeave={() => setActive(null)}
+              transition={{ delay: i * 0.08, duration: 0.9, ease: "easeOut" }}
+              className="group relative overflow-hidden h-[380px] sm:h-[420px] lg:h-[450px] shadow-lg cursor-pointer bg-[#1e3329]"
             >
-              {/* Image */}
-              <div className="relative aspect-[4/3.2] overflow-hidden">
+              {/* Image Container with Zoom hover */}
+              <div className="absolute inset-0 overflow-hidden">
                 <Image
                   src={exp.image}
                   alt={exp.title}
@@ -109,42 +106,36 @@ export default function ExperienceSection() {
                   className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                {/* Dark gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1e3329]/95 via-[#1e3329]/30 to-transparent" />
-                {/* Active dim */}
-                <div
-                  className={`absolute inset-0 bg-[#2F4F3E]/40 transition-opacity duration-500 ${active === exp.id ? "opacity-100" : "opacity-0"}`}
-                />
+              </div>
 
-                {/* Tag badge */}
-                <div
-                  className="absolute top-4 left-4 px-3 py-1 text-[0.58rem] tracking-[0.3em] uppercase font-medium text-white"
-                  style={{ background: exp.tagColor }}
+              {/* Dynamic Overlays */}
+              {/* Solid gradient overlay for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/5 z-10 transition-all duration-500 group-hover:from-black/95 group-hover:via-black/50" />
+              {/* Soft forest green glow overlay on hover */}
+              <div className="absolute inset-0 bg-[#2F4F3E]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+
+              {/* Tag Badge */}
+              <div
+                className="absolute top-5 left-5 z-20 px-3 py-1.5 text-[0.55rem] tracking-[0.3em] uppercase font-bold text-white"
+                style={{ background: exp.tagColor }}
+              >
+                {exp.tag}
+              </div>
+
+              {/* Content Panel */}
+              <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 z-20 flex flex-col justify-end">
+                <h3
+                  className="text-xl md:text-2xl font-bold text-white mb-3 tracking-wide transition-colors duration-300 group-hover:text-[#C9A96E]"
+                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                 >
-                  {exp.tag}
-                </div>
-
-                {/* Content at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3
-                    className="text-xl font-bold text-white mb-2 group-hover:text-[#C9A96E] transition-colors duration-400"
-                    style={{ fontFamily: "'Playfair Display', serif" }}
-                  >
-                    {exp.title}
-                  </h3>
-                  {/* Desc reveal on hover */}
-                  <motion.div
-                    animate={{
-                      height: active === exp.id ? "auto" : 0,
-                      opacity: active === exp.id ? 1 : 0,
-                    }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                    className="overflow-hidden"
-                  >
-                    <p className="text-xs text-white/65 leading-relaxed pb-1">
-                      {exp.desc}
-                    </p>
-                  </motion.div>
+                  {exp.title}
+                </h3>
+                
+                {/* Description: Slides up on desktop, static on mobile for accessibility */}
+                <div className="overflow-hidden">
+                  <p className="text-xs md:text-[0.82rem] leading-relaxed text-white/75 lg:opacity-0 lg:translate-y-8 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-500 ease-out">
+                    {exp.desc}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -154,4 +145,3 @@ export default function ExperienceSection() {
     </section>
   );
 }
-

@@ -4,7 +4,6 @@ import FeaturesSection from "./components/FeaturesSection";
 import StorySection from "./components/StorySection";
 import ExperienceSection from "./components/ExperienceSection";
 import AccommodationSection from "./components/AccommodationSection";
-import GallerySection from "./components/GallerySection";
 import ReviewsSection from "./components/ReviewsSection";
 import FAQSection from "./components/FAQSection";
 import BookingCTASection from "./components/BookingCTASection";
@@ -31,9 +30,6 @@ export default function HomePage() {
 
       {/* S5 — Accommodation */}
       <AccommodationSection />
-
-      {/* S6 — Gallery */}
-      <GallerySection />
 
       {/* S7 — Reviews */}
       <ReviewsSection />

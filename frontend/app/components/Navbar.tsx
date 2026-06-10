@@ -9,7 +9,6 @@ const NAV_LINKS = [
   { label: "Retreat", href: "#story" },
   { label: "Experiences", href: "#experiences" },
   { label: "Accommodation", href: "#accommodation" },
-  { label: "Gallery", href: "#gallery" },
   { label: "Location", href: "#location" },
 ];
 
@@ -45,8 +44,8 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-[#1e3329]/80 backdrop-blur-xl border-b border-white/5 shadow-lg h-[90px]"
-            : "bg-transparent h-[90px]"
+            ? "bg-[#1e3329]/80 backdrop-blur-xl border-b border-white/5 shadow-lg h-[70px]"
+            : "bg-transparent h-[86px]"
         }`}
       >
         <div className="container-luxury h-full">

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const NAV_COL = {
-  "Explore": ["The Retreat", "Experiences", "Accommodation", "Gallery"],
+  "Explore": ["The Retreat", "Experiences", "Accommodation"],
   "Visit": ["Getting Here", "What to Pack", "Seasonal Guide", "FAQs"],
   "Policies": ["Privacy Policy", "Terms of Stay", "Cancellation Policy", "Sustainability"],
 };

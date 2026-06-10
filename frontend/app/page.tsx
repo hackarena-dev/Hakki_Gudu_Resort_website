@@ -1,15 +1,15 @@
-import Navbar from "./components/navbar/Navbar";
-import HeroSection from "./components/hero/HeroSection";
-import FeaturesSection from "./components/features/FeaturesSection";
-import StorySection from "./components/story/StorySection";
-import ExperienceSection from "./components/experience/ExperienceSection";
-import AccommodationSection from "./components/accommodation/AccommodationSection";
-import GallerySection from "./components/gallery/GallerySection";
-import ReviewsSection from "./components/reviews/ReviewsSection";
-import FAQSection from "./components/faq/FAQSection";
-import BookingCTASection from "./components/booking/BookingCTASection";
-import LocationSection from "./components/location/LocationSection";
-import Footer from "./components/footer/Footer";
+import Navbar from "./components/Navbar";
+import HeroSection from "./components/HeroSection";
+import FeaturesSection from "./components/FeaturesSection";
+import StorySection from "./components/StorySection";
+import ExperienceSection from "./components/ExperienceSection";
+import AccommodationSection from "./components/AccommodationSection";
+import GallerySection from "./components/GallerySection";
+import ReviewsSection from "./components/ReviewsSection";
+import FAQSection from "./components/FAQSection";
+import BookingCTASection from "./components/BookingCTASection";
+import LocationSection from "./components/LocationSection";
+import Footer from "./components/Footer";
 
 export default function HomePage() {
   return (

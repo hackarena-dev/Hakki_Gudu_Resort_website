@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -518,15 +518,17 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
         <div className="mt-6 pt-5 border-t border-[#6B4F3A]/10">
           <p className="text-[0.58rem] tracking-[0.3em] uppercase text-[#6B4F3A]/50 mb-3">All Stays Include</p>
           <div className="flex flex-col gap-2">
-            {[
-              [Leaf, "Farm-to-table meals (all day)"],
-              [Coffee, "Morning chai & coffee"],
-              [Waves, "Stream & nature access"],
-              [Star, "Bonfire & stargazing"],
-            ].map(([Icon, text], i) => (
-              <div key={i} className="flex items-center gap-2 text-xs text-[#6B4F3A]/65">
+            {(
+              [
+                { icon: Leaf,   text: "Farm-to-table meals (all day)" },
+                { icon: Coffee, text: "Morning chai & coffee" },
+                { icon: Waves,  text: "Stream & nature access" },
+                { icon: Star,   text: "Bonfire & stargazing" },
+              ] as { icon: React.ElementType; text: string }[]
+            ).map(({ icon: Icon, text }) => (
+              <div key={text} className="flex items-center gap-2 text-xs text-[#6B4F3A]/65">
                 <Icon size={11} className="text-[#2F4F3E] flex-shrink-0" />
-                {text}
+                <span>{text}</span>
               </div>
             ))}
           </div>

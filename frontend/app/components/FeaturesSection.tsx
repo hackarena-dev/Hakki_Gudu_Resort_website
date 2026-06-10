@@ -37,6 +37,9 @@ const FEATURES = [
   },
 ];
 
+const SANCTUARY_FEATURES = [FEATURES[0], FEATURES[1], FEATURES[3]];
+const EXPERIENCE_FEATURES = [FEATURES[2], FEATURES[4], FEATURES[5]];
+
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
@@ -77,12 +80,12 @@ export default function FeaturesSection() {
           </p>
         </motion.div>
 
-        {/* Cards Grid */}
+        {/* Desktop Cards Grid (Visible on desktop only) */}
         <motion.div
           variants={container}
           initial="hidden"
           animate={inView ? "show" : "hidden"}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6"
+          className="hidden lg:grid grid-cols-3 gap-6"
         >
           {FEATURES.map((f) => {
             const Icon = f.icon;
@@ -115,6 +118,80 @@ export default function FeaturesSection() {
               </motion.div>
             );
           })}
+        </motion.div>
+
+        {/* Mobile/Tablet Layout (Grouped into 2 cards, visible on smaller screens only) */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={inView ? "show" : "hidden"}
+          className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          {/* Card 1: The Sanctuary */}
+          <motion.div
+            variants={cardAnim}
+            className="relative p-6 sm:p-8 border border-[#6B4F3A]/10 bg-white hover:border-[#2F4F3E]/20 hover:shadow-lg transition-all duration-400 overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-12 h-12 bg-[#F5F1E8] clip-corner" />
+            <p className="text-[0.55rem] tracking-[0.3em] uppercase text-[#B56A4A] font-bold mb-1">Stay & Privacy</p>
+            <h3
+              className="text-xl sm:text-2xl font-bold text-[#2C2C2C] mb-1"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              The Sanctuary
+            </h3>
+            <p className="text-xs text-[#6B4F3A]/60 tracking-wide mb-6 uppercase font-medium">Earthy luxury and absolute privacy</p>
+
+            <div className="flex flex-col gap-5">
+              {SANCTUARY_FEATURES.map((f) => {
+                const Icon = f.icon;
+                return (
+                  <div key={f.title} className="flex items-start gap-4">
+                    <div className="w-8 h-8 border border-[#6B4F3A]/20 flex items-center justify-center flex-shrink-0 text-[#6B4F3A] bg-[#FAF7F2]">
+                      <Icon size={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#2C2C2C] mb-0.5">{f.title}</h4>
+                      <p className="text-xs text-[#2C2C2C]/60 leading-relaxed">{f.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* Card 2: The Experience */}
+          <motion.div
+            variants={cardAnim}
+            className="relative p-6 sm:p-8 border border-[#6B4F3A]/10 bg-white hover:border-[#2F4F3E]/20 hover:shadow-lg transition-all duration-400 overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-12 h-12 bg-[#F5F1E8] clip-corner" />
+            <p className="text-[0.55rem] tracking-[0.3em] uppercase text-[#B56A4A] font-bold mb-1">Connection & Nature</p>
+            <h3
+              className="text-xl sm:text-2xl font-bold text-[#2C2C2C] mb-1"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              The Experience
+            </h3>
+            <p className="text-xs text-[#6B4F3A]/60 tracking-wide mb-6 uppercase font-medium">Moments crafted for connection</p>
+
+            <div className="flex flex-col gap-5">
+              {EXPERIENCE_FEATURES.map((f) => {
+                const Icon = f.icon;
+                return (
+                  <div key={f.title} className="flex items-start gap-4">
+                    <div className="w-8 h-8 border border-[#6B4F3A]/20 flex items-center justify-center flex-shrink-0 text-[#6B4F3A] bg-[#FAF7F2]">
+                      <Icon size={16} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-[#2C2C2C] mb-0.5">{f.title}</h4>
+                      <p className="text-xs text-[#2C2C2C]/60 leading-relaxed">{f.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

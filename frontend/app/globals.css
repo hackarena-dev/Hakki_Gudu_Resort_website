@@ -1,26 +1,139 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Woody Earthy Palette */
+  --wood-darkest: #1a0f08;
+  --wood-dark: #2c1a0e;
+  --wood-medium: #4a2c1a;
+  --wood-warm: #6b3d24;
+  --wood-light: #8b5e3c;
+  --wood-sand: #c4956a;
+  --wood-cream: #e8d5b7;
+  --wood-ivory: #f5efe6;
+
+  --forest-deep: #1a2e1a;
+  --forest-dark: #2d4a2d;
+  --forest-medium: #3d6b3d;
+  --forest-light: #5a8f5a;
+
+  --amber-gold: #d4a855;
+  --amber-warm: #c8952a;
+  --amber-light: #e8c97a;
+
+  --stone-dark: #3a3530;
+  --stone-medium: #6b6058;
+  --stone-light: #a89880;
+
+  --background: var(--wood-ivory);
+  --foreground: var(--wood-darkest);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Jost', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Jost', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--wood-ivory);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--wood-sand);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--wood-warm);
+}
+
+/* Grain texture overlay */
+.grain-texture {
+  position: relative;
+}
+
+.grain-texture::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+}
+
+/* Wood grain divider */
+.wood-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--amber-gold), var(--wood-sand), var(--amber-gold), transparent);
+}
+
+/* Selection */
+::selection {
+  background: var(--amber-gold);
+  color: var(--wood-darkest);
+}
+
+/* Smooth image load */
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Animation utilities */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 85, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(212, 168, 85, 0.6); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Leaf pattern decorative element */
+.leaf-decoration {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 C20 5, 5 20, 5 30 C5 40, 20 55, 30 55 C40 55, 55 40, 55 30 C55 20, 40 5, 30 5Z' fill='none' stroke='%23d4a855' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E");
 }

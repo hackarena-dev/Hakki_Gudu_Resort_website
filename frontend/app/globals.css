@@ -1,139 +1,268 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Jost:wght@200;300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap');
 
+/* ─── DESIGN TOKENS ─────────────────────────────────────── */
 :root {
-  /* Woody Earthy Palette */
-  --wood-darkest: #1a0f08;
-  --wood-dark: #2c1a0e;
-  --wood-medium: #4a2c1a;
-  --wood-warm: #6b3d24;
-  --wood-light: #8b5e3c;
-  --wood-sand: #c4956a;
-  --wood-cream: #e8d5b7;
-  --wood-ivory: #f5efe6;
-
-  --forest-deep: #1a2e1a;
-  --forest-dark: #2d4a2d;
-  --forest-medium: #3d6b3d;
-  --forest-light: #5a8f5a;
-
-  --amber-gold: #d4a855;
-  --amber-warm: #c8952a;
-  --amber-light: #e8c97a;
-
-  --stone-dark: #3a3530;
-  --stone-medium: #6b6058;
-  --stone-light: #a89880;
-
-  --background: var(--wood-ivory);
-  --foreground: var(--wood-darkest);
+  --forest:      #2F4F3E;
+  --forest-dark: #1e3329;
+  --forest-light:#3d6b52;
+  --walnut:      #6B4F3A;
+  --walnut-dark: #4a3528;
+  --walnut-light:#8b6a52;
+  --sand:        #F5F1E8;
+  --cream:       #FAF7F2;
+  --olive:       #798A63;
+  --olive-light: #9aad82;
+  --terra:       #B56A4A;
+  --terra-light: #cc8060;
+  --charcoal:    #2C2C2C;
+  --charcoal-70: rgba(44,44,44,0.7);
+  --white:       #ffffff;
+  --gold:        #C9A96E;
+  --gold-light:  #e8cc98;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ─── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  font-size: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--cream);
+  color: var(--charcoal);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Typography */
-.font-serif {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+/* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  line-height: 1.15;
+  font-weight: 600;
+  color: var(--charcoal);
 }
 
-.font-sans {
-  font-family: 'Jost', sans-serif;
+.heading-display {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+.heading-serif {
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--wood-ivory);
+.body-inter {
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--wood-sand);
-  border-radius: 3px;
+/* ─── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--sand); }
+::-webkit-scrollbar-thumb { background: var(--walnut); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--forest); }
+
+/* ─── SELECTION ──────────────────────────────────────────── */
+::selection { background: var(--gold); color: var(--charcoal); }
+
+/* ─── UTILITY CLASSES ────────────────────────────────────── */
+.container-luxury {
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 5rem);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--wood-warm);
+.section-pad {
+  padding-block: clamp(4rem, 8vw, 8rem);
 }
 
-/* Grain texture overlay */
-.grain-texture {
+.section-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--terra);
+}
+
+.divider-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.divider-gold::before,
+.divider-gold::after {
+  content: '';
+  flex: 1;
+  min-width: 2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
+.divider-gold::after {
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+/* ─── BUTTON STYLES ──────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.25rem;
+  background: var(--forest);
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--forest);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
   position: relative;
+  overflow: hidden;
 }
-
-.grain-texture::before {
+.btn-primary::after {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.05;
+  background: var(--walnut);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  z-index: 0;
+}
+.btn-primary:hover::after { transform: scaleX(1); transform-origin: left; }
+.btn-primary span { position: relative; z-index: 1; }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.25rem;
+  background: transparent;
+  color: var(--cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
-/* Wood grain divider */
-.wood-divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--amber-gold), var(--wood-sand), var(--amber-gold), transparent);
+/* ─── CARD STYLES ────────────────────────────────────────── */
+.card-luxury {
+  background: var(--cream);
+  border: 1px solid rgba(107,79,58,0.12);
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), box-shadow 0.5s;
+}
+.card-luxury:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(47,79,62,0.12);
 }
 
-/* Selection */
-::selection {
-  background: var(--amber-gold);
-  color: var(--wood-darkest);
+/* ─── SECTION TRANSITIONS ────────────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── ANIMATIONS ─────────────────────────────────────────── */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
 }
 
-/* Smooth image load */
-img {
-  display: block;
-  max-width: 100%;
+@keyframes scroll-line {
+  0%   { height: 0; top: 0; }
+  50%  { height: 100%; top: 0; }
+  100% { height: 0; top: 100%; }
 }
 
-/* Animation utilities */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 85, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(212, 168, 85, 0.6); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
+@keyframes shimmer-text {
+  0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
+@keyframes slow-zoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+.animate-float { animation: float-y 4s ease-in-out infinite; }
+.animate-slow-zoom { animation: slow-zoom 8s cubic-bezier(0.22,1,0.36,1) forwards; }
+
+/* ─── IMAGE BASE ─────────────────────────────────────────── */
+img { display: block; max-width: 100%; }
+
+/* ─── ACCORDION ──────────────────────────────────────────── */
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.accordion-content.open {
+  grid-template-rows: 1fr;
+}
+.accordion-inner { overflow: hidden; }
+
+/* ─── GALLERY ────────────────────────────────────────────── */
+.gallery-item { break-inside: avoid; }
+.gallery-item img { width: 100%; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+.gallery-item:hover img { transform: scale(1.04); }
+
+/* ─── LIGHTBOX ───────────────────────────────────────────── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Leaf pattern decorative element */
-.leaf-decoration {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 5 C20 5, 5 20, 5 30 C5 40, 20 55, 30 55 C40 55, 55 40, 55 30 C55 20, 40 5, 30 5Z' fill='none' stroke='%23d4a855' stroke-width='0.5' opacity='0.3'/%3E%3C/svg%3E");
+/* ─── FORM INPUTS ────────────────────────────────────────── */
+.input-luxury {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(107,79,58,0.3);
+  padding: 0.75rem 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.3s;
 }
+.input-luxury:focus { border-color: var(--forest); }
+.input-luxury::placeholder { color: rgba(44,44,44,0.35); }
+
+.input-luxury-box {
+  width: 100%;
+  background: var(--sand);
+  border: 1px solid transparent;
+  padding: 0.85rem 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.3s;
+}
+.input-luxury-box:focus { border-color: var(--forest); }

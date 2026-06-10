@@ -122,13 +122,13 @@ export default function HeroSection() {
           <motion.div variants={fadeUpVariants} className="flex flex-col sm:flex-row gap-5 items-center w-full sm:w-auto">
             <Link
               href="/booking"
-              className="w-full sm:w-auto px-9 py-4 bg-[#C9A96E] text-[#1e3329] text-[0.7rem] tracking-[0.25em] uppercase font-bold hover:text-[#1e3329] transition-colors duration-500 shadow-lg relative overflow-hidden group text-center"
+              className="w-fit sm:w-auto px-6 py-3.5 sm:px-9 sm:py-4 bg-[#C9A96E] text-[#1e3329] text-[0.68rem] sm:text-[0.7rem] tracking-[0.25em] uppercase font-bold hover:text-[#1e3329] transition-colors duration-500 shadow-lg relative overflow-hidden group text-center"
             >
               <span className="relative z-10">Reserve Your Stay</span>
               <span className="absolute inset-0 w-full h-full bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0" />
             </Link>
             <button
-              className="w-full sm:w-auto px-7 py-4 border-b border-white/20 text-white hover:border-[#C9A96E] text-[0.7rem] tracking-[0.25em] uppercase font-bold transition-all duration-400 group text-center"
+              className="w-fit sm:w-auto px-5 py-3 sm:py-4 border-b border-white/20 text-white hover:border-[#C9A96E] text-[0.68rem] sm:text-[0.7rem] tracking-[0.25em] uppercase font-bold transition-all duration-400 group text-center"
               onClick={() => {
                 const storySec = document.querySelector("#story");
                 if (storySec) {

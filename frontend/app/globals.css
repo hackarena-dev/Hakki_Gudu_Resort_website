@@ -73,9 +73,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── UTILITY CLASSES ────────────────────────────────────── */
 .container-luxury {
-  max-width: 1280px;
+  max-width: 100%;
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 5rem);
+  padding-inline: clamp(1.25rem, 5vw, 0rem);
 }
 
 .section-pad {

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import PageLoader from "./components/PageLoader";
 
 export const metadata: Metadata = {
   title: "The Nest — Private Nature Retreat | Luxury Forest Villa",
@@ -48,7 +49,10 @@ export default function RootLayout({
         />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>{children}</body>
+      <body>
+        <PageLoader />
+        {children}
+      </body>
     </html>
   );
 }

@@ -16,15 +16,11 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastY, setLastY] = useState(0);
 
   const handleScroll = useCallback(() => {
     const y = window.scrollY;
-    setScrolled(y > 60);
-    setHidden(y > lastY && y > 200);
-    setLastY(y);
-  }, [lastY]);
+    setScrolled(y > 30);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -45,7 +41,7 @@ export default function Navbar() {
     <>
       <motion.header
         initial={{ y: -90, opacity: 0 }}
-        animate={{ y: hidden ? -90 : 0, opacity: 1 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled

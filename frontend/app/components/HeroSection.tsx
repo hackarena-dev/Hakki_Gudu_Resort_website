@@ -20,7 +20,7 @@ const fadeUpVariants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.0, ease: [0.25, 1, 0.5, 1] },
+    transition: { duration: 1.0, ease: [0.25, 1, 0.5, 1] as const },
   },
 };
 
@@ -29,7 +29,7 @@ const textRevealVariants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -102,8 +102,8 @@ export default function HeroSection() {
           <div className="overflow-hidden mb-6">
             <motion.h1
               variants={textRevealVariants}
-              className="text-4xl md:text-6xl lg:text-[4.2rem] xl:text-[4.8rem] font-light text-white leading-[1.12] tracking-tight"
-              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+              className="text-4xl md:text-6xl lg:text-[4.2rem] xl:text-[4.8rem] font-light leading-[1.12] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif", color: 'white' }}
             >
               Escape Into <br className="hidden md:inline" />
               <span className="italic font-normal text-[#C9A96E]">Nature&apos;s Quiet Luxury</span>

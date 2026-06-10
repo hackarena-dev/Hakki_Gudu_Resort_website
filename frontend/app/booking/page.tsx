@@ -121,7 +121,7 @@ export default function BookingPage() {
             <ChevronLeft size={14} /> Back to Home
           </Link>
           <p className="section-label text-[#C9A96E] mb-3">Private Nature Retreat</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <h1 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif", color: '#ffffff' }}>
             Reserve Your Nest
           </h1>
         </div>
@@ -134,7 +134,7 @@ export default function BookingPage() {
             {STEPS.map((s, i) => (
               <div key={s} className="flex items-center">
                 <div className="flex items-center gap-2">
-                  <div className={`w-7 h-7 flex items-center justify-center text-xs font-semibold transition-all duration-400 ${
+                  <div className={`w-7 h-7 flex items-center justify-center text-xs font-semibold transition-all duration-300 ${
                     i < step ? "bg-[#2F4F3E] text-white" :
                     i === step ? "bg-[#2F4F3E] text-white ring-2 ring-[#2F4F3E]/25 ring-offset-2" :
                     "bg-[#F5F1E8] text-[#6B4F3A]/50"

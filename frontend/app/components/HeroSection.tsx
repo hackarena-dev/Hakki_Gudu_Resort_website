@@ -63,7 +63,7 @@ export default function HeroSection() {
         >
           <Image
             src="/hero.png"
-            alt="The Nest Private Luxury Nature Retreat"
+            alt="Hakki Goodu Private Luxury Nature Retreat"
             fill
             priority
             quality={95}

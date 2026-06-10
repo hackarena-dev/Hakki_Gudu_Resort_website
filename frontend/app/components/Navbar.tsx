@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
@@ -59,21 +60,22 @@ export default function Navbar() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <div className="flex items-center gap-3.5">
-                {/* Scaled-up elegant Nest logo */}
-                <svg width="38" height="38" viewBox="0 0 32 32" fill="none" className="transition-transform duration-500 hover:rotate-12">
-                  <circle cx="16" cy="16" r="15" stroke="#C9A96E" strokeWidth="1"/>
-                  <path d="M8 22c0-5.5 3.5-9 8-9s8 3.5 8 9" stroke="#C9A96E" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                  <path d="M6 22c2-4 5-5.5 10-5.5S24 18 26 22" stroke="#C9A96E" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.6"/>
-                  <circle cx="16" cy="14" r="2.5" fill="#C9A96E"/>
-                </svg>
+                {/* Official Hakki Goodu logo */}
+                <Image
+                  src="/logo.png"
+                  alt="Hakki Goodu Logo"
+                  width={42}
+                  height={42}
+                  className="object-contain transition-transform duration-500 hover:rotate-12"
+                />
                 <div>
                   <p
-                    className="text-lg md:text-xl font-bold tracking-[0.32em] text-white leading-none uppercase"
+                    className="text-lg md:text-xl font-bold tracking-[0.2em] text-white leading-none uppercase"
                     style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                   >
-                    The Nest
+                    Hakki Goodu
                   </p>
-                  <p className="text-[0.58rem] tracking-[0.48em] text-[#C9A96E] uppercase font-semibold mt-1">
+                  <p className="text-[0.55rem] tracking-[0.42em] text-[#C9A96E] uppercase font-semibold mt-1">
                     Nature Retreat
                   </p>
                 </div>

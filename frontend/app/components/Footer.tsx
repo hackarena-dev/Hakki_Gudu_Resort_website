@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 const NAV_COL = {
@@ -21,17 +22,18 @@ export default function Footer() {
           <div>
             {/* Logo */}
             <div className="flex items-center gap-2.5 mb-5">
-              <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
-                <circle cx="16" cy="16" r="15" stroke="#C9A96E" strokeWidth="1"/>
-                <path d="M8 22c0-5.5 3.5-9 8-9s8 3.5 8 9" stroke="#C9A96E" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                <path d="M6 22c2-4 5-5.5 10-5.5S24 18 26 22" stroke="#C9A96E" strokeWidth="1" strokeLinecap="round" fill="none" opacity="0.6"/>
-                <circle cx="16" cy="14" r="2.5" fill="#C9A96E"/>
-              </svg>
+              <Image
+                src="/logo.png"
+                alt="Hakki Goodu Logo"
+                width={36}
+                height={36}
+                className="object-contain"
+              />
               <div>
-                <p className="text-lg font-bold tracking-[0.2em] text-white leading-none uppercase" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  The Nest
+                <p className="text-lg font-bold tracking-[0.18em] text-white leading-none uppercase" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  Hakki Goodu
                 </p>
-                <p className="text-[0.5rem] tracking-[0.4em] text-[#C9A96E] uppercase mt-0.5">Nature Retreat</p>
+                <p className="text-[0.5rem] tracking-[0.42em] text-[#C9A96E] uppercase mt-0.5">Nature Retreat</p>
               </div>
             </div>
             <p className="text-xs text-white/40 leading-6 max-w-[220px] mb-7">
@@ -92,7 +94,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-7 text-center">
           <p className="text-[0.6rem] text-white/25 tracking-wide">
-            © {year} The Nest Nature Retreat. All rights reserved. · Coorg, Karnataka, India.
+            © {year} Hakki Goodu Nature Retreat. All rights reserved. · Coorg, Karnataka, India.
           </p>
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-[#798A63] animate-pulse" />

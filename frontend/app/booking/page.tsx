@@ -114,7 +114,7 @@ export default function BookingPage() {
     <div className="min-h-screen bg-[#FAF7F2]" ref={topRef}>
       {/* ── Booking Hero ── */}
       <div className="relative h-52 md:h-64 overflow-hidden">
-        <Image src="/hero.png" alt="The Nest booking" fill className="object-cover object-center" />
+        <Image src="/hero.png" alt="Hakki Goodu booking" fill className="object-cover object-center" />
         <div className="absolute inset-0 bg-[#1e3329]/80" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5">
           <Link href="/" className="absolute top-5 left-5 md:left-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-xs tracking-widest uppercase">
@@ -431,7 +431,7 @@ function StepConfirm({ form, room, nights, subtotal, tax, total }: {
 
       <div className="mt-6 p-4 bg-[#F5F1E8] border border-[#6B4F3A]/15">
         <p className="text-[0.65rem] text-[#6B4F3A]/60 leading-5">
-          By confirming, you agree to The Nest&apos;s cancellation policy. Full payment details and confirmation will be sent to your email within 24 hours. No payment is processed at this step.
+          By confirming, you agree to Hakki Goodu&apos;s cancellation policy. Full payment details and confirmation will be sent to your email within 24 hours. No payment is processed at this step.
         </p>
       </div>
     </div>
@@ -451,7 +451,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
       <div className="relative h-44 overflow-hidden">
         <Image
           src={room?.image || "/hero.png"}
-          alt={room?.name || "The Nest"}
+          alt={room?.name || "Hakki Goodu"}
           fill
           className="object-cover transition-all duration-700"
           sizes="360px"

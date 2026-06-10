@@ -17,7 +17,7 @@ export default function BookingCTASection() {
       <motion.div className="absolute inset-0 will-change-transform" style={{ y: bgY }}>
         <Image
           src="/bonfire.png"
-          alt="Evening bonfire at The Nest resort"
+          alt="Evening bonfire at Hakki Goodu resort"
           fill
           className="object-cover object-center"
           sizes="100vw"

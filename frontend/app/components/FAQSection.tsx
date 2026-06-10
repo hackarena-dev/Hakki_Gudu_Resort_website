@@ -14,20 +14,20 @@ const FAQS = [
     a: "Yes — all farm-fresh meals are included in your stay. Breakfast, lunch, and dinner are prepared daily using produce from our organic farm and local village kitchens. We accommodate dietary preferences and restrictions with advance notice.",
   },
   {
-    q: "How many guests can The Nest host at once?",
-    a: "The Nest maintains a strict maximum of 20 guests across all villas at any time. This ensures genuine privacy, personal service, and an intimate connection with nature for every guest.",
+    q: "How many guests can Hakki Goodu host at once?",
+    a: "Hakki Goodu maintains a strict maximum of 20 guests across all villas at any time. This ensures genuine privacy, personal service, and an intimate connection with nature for every guest.",
   },
   {
-    q: "Is there parking available at The Nest?",
-    a: "Yes, we have secure private parking within the property. Our team will greet you at the entrance and assist with luggage. The road leading to The Nest is motorable for all vehicle types.",
+    q: "Is there parking available at Hakki Goodu?",
+    a: "Yes, we have secure private parking within the property. Our team will greet you at the entrance and assist with luggage. The road leading to Hakki Goodu is motorable for all vehicle types.",
   },
   {
-    q: "Are pets allowed at The Nest?",
+    q: "Are pets allowed at Hakki Goodu?",
     a: "We love animals, but to protect our local wildlife and maintain the natural ecosystem of our forest property, we are currently unable to accommodate pets. We hope you understand.",
   },
   {
     q: "Is there mobile signal or Wi-Fi at the property?",
-    a: "There is limited mobile connectivity — which most of our guests find to be the greatest luxury of all. We provide basic Wi-Fi in the main pavilion for essential communication. The Nest is a place to disconnect and be present.",
+    a: "There is limited mobile connectivity — which most of our guests find to be the greatest luxury of all. We provide basic Wi-Fi in the main pavilion for essential communication. Hakki Goodu is a place to disconnect and be present.",
   },
   {
     q: "What is the nearest airport or railway station?",

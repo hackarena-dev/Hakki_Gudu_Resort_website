@@ -42,7 +42,7 @@ const EXPERIENCES = [
     title: "Stargazing",
     tag: "Celestial",
     tagColor: "#2F4F3E",
-    desc: "Far from city lights, The Nest offers a vast, clear sky. Our resident guide walks you through constellations in intimate nightly sessions.",
+    desc: "Far from city lights, Hakki Goodu offers a vast, clear sky. Our resident guide walks you through constellations in intimate nightly sessions.",
     image: "/stargazing.png",
   },
   {
@@ -83,7 +83,7 @@ export default function ExperienceSection() {
             <em className="italic text-[#C9A96E]">Stay With You</em>
           </h2>
           <p className="mt-5 text-sm text-white/50 max-w-lg mx-auto leading-relaxed">
-            Every experience at The Nest is curated to create a genuine connection with the land, the people, and yourself.
+            Every experience at Hakki Goodu is curated to create a genuine connection with the land, the people, and yourself.
           </p>
         </motion.div>
 

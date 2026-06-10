@@ -38,7 +38,7 @@ export default function StorySection() {
             <div className="relative aspect-[3/4] overflow-hidden">
               <Image
                 src="/about.png"
-                alt="The Nest resort interior — handcrafted teak wood and natural materials"
+                alt="Hakki Goodu resort interior — handcrafted teak wood and natural materials"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 55vw"
@@ -56,7 +56,7 @@ export default function StorySection() {
             >
               <Image
                 src="/stream.png"
-                alt="Natural stream at The Nest"
+                alt="Natural stream at Hakki Goodu"
                 fill
                 className="object-cover"
                 sizes="200px"
@@ -101,7 +101,7 @@ export default function StorySection() {
             <div className="w-10 h-0.5 bg-[#C9A96E]" />
 
             <p className="text-sm text-[#2C2C2C]/65 leading-7">
-              The Nest was born from a quiet longing — to find a place where the forest doesn&apos;t end at the door. Where every structure breathes, every corner feels handmade, and every morning begins with birdsong instead of alarms.
+              Hakki Goodu was born from a quiet longing — to find a place where the forest doesn&apos;t end at the door. Where every structure breathes, every corner feels handmade, and every morning begins with birdsong instead of alarms.
             </p>
             <p className="text-sm text-[#2C2C2C]/65 leading-7">
               We built this retreat using centuries-old techniques — hand-laid stone, teak joinery, bamboo lattice — so it ages gracefully and belongs to this land. Our team lives in the surrounding village. The food grows on our farm. The pace is set by nature, not a schedule.
@@ -117,7 +117,7 @@ export default function StorySection() {
                 We wove a resting place within it."
               </p>
               <p className="mt-2 text-xs text-[#6B4F3A]/70 tracking-wide">
-                — Founders, The Nest
+                — Founders, Hakki Goodu
               </p>
             </div>
 

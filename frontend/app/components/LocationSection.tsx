@@ -105,7 +105,7 @@ export default function LocationSection() {
                     className="text-xl font-bold text-white mb-1"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
-                    The Nest
+                    Hakki Goodu
                   </p>
                   <p className="text-xs text-white/55">Coorg, Karnataka — 571215</p>
                 </div>
@@ -170,7 +170,7 @@ export default function LocationSection() {
                 Address
               </p>
               <p className="text-sm text-white leading-relaxed">
-                The Nest Nature Retreat,<br />
+                Hakki Goodu Nature Retreat,<br />
                 Near Coorg Forest Reserve,<br />
                 Kodagu District, Karnataka — 571 215<br />
                 India

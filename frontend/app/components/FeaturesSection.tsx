@@ -28,7 +28,7 @@ const FEATURES = [
   {
     icon: Flame,
     title: "Bonfire Area",
-    desc: "Every evening, the bonfire becomes the heartbeat of The Nest — stories, warmth, and stars.",
+    desc: "Every evening, the bonfire becomes the heartbeat of Hakki Goodu — stories, warmth, and stars.",
   },
   {
     icon: Sprout,
@@ -64,7 +64,7 @@ export default function FeaturesSection() {
           transition={{ duration: 0.8, ease: "easeOut" as const }}
           className="text-center mb-14 lg:mb-20"
         >
-          <p className="section-label mb-4">Why The Nest</p>
+          <p className="section-label mb-4">Why Hakki Goodu</p>
           <h2
             className="text-4xl md:text-5xl lg:text-[3.2rem] font-bold text-[#2C2C2C] leading-tight"
             style={{ fontFamily: "'Playfair Display', serif" }}
@@ -73,7 +73,7 @@ export default function FeaturesSection() {
             <em className="italic text-[#2F4F3E] font-semibold">Nothing You Don&apos;t.</em>
           </h2>
           <p className="mt-5 max-w-xl mx-auto text-sm text-[#6B4F3A]/70 leading-relaxed">
-            The Nest is designed for those who crave genuine connection — with nature, with loved ones, and with themselves.
+            Hakki Goodu is designed for those who crave genuine connection — with nature, with loved ones, and with themselves.
           </p>
         </motion.div>
 

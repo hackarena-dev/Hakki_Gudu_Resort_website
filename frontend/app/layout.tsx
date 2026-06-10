@@ -3,28 +3,28 @@ import "./globals.css";
 import PageLoader from "./components/PageLoader";
 
 export const metadata: Metadata = {
-  title: "The Nest — Private Nature Retreat | Luxury Forest Villa",
+  title: "Hakki Goodu — Private Nature Retreat | Luxury Forest Villa",
   description:
-    "Escape into The Nest — a private luxury nature retreat surrounded by 2 acres of pristine forest, natural streams, farm trails, and starlit bonfire nights in Karnataka, India.",
+    "Escape into Hakki Goodu — a private luxury nature retreat surrounded by 2 acres of pristine forest, natural streams, farm trails, and starlit bonfire nights in Karnataka, India.",
   keywords: [
     "luxury nature retreat",
     "private forest villa",
     "eco resort Karnataka",
-    "The Nest resort",
+    "Hakki Goodu resort",
     "Coorg nature stay",
     "forest retreat India",
   ].join(", "),
   openGraph: {
-    title: "The Nest — Private Nature Retreat",
+    title: "Hakki Goodu — Private Nature Retreat",
     description:
       "Where nature welcomes you home. A private luxury resort immersed in pristine forest.",
     type: "website",
     locale: "en_IN",
-    siteName: "The Nest Nature Retreat",
+    siteName: "Hakki Goodu Nature Retreat",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Nest — Private Nature Retreat",
+    title: "Hakki Goodu — Private Nature Retreat",
     description: "Luxury forest villa escape. Bonfires, streams, stars, and silence.",
   },
   robots: { index: true, follow: true },

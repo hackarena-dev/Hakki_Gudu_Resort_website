@@ -10,7 +10,7 @@ const REVIEWS = [
     location: "Mumbai",
     stay: "Forest Canopy Villa · 4 Nights",
     rating: 5,
-    text: "We've stayed at luxury properties across Southeast Asia, but The Nest gave us something none of them could — complete, unhurried peace. The bonfire evening was the highlight of our honeymoon. We still talk about it every day.",
+    text: "We've stayed at luxury properties across Southeast Asia, but Hakki Goodu gave us something none of them could — complete, unhurried peace. The bonfire evening was the highlight of our honeymoon. We still talk about it every day.",
   },
   {
     name: "Meera Krishnan",
@@ -38,7 +38,7 @@ const REVIEWS = [
     location: "Pune",
     stay: "Riverside Nest Suite · 4 Nights",
     rating: 5,
-    text: "The stream outside our suite was the most beautiful alarm clock we've ever had. Every meal was a story, every evening a memory. The Nest redefines what a holiday means.",
+    text: "The stream outside our suite was the most beautiful alarm clock we've ever had. Every meal was a story, every evening a memory. Hakki Goodu redefines what a holiday means.",
   },
 ];
 

@@ -1,178 +1,203 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown } from "lucide-react";
 
-const container = {
+const containerVariants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.14, delayChildren: 0.7 } },
-};
-const item = {
-  hidden: { opacity: 0, y: 50, clipPath: "inset(100% 0 0 0)" },
   show: {
-    opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)",
-    transition: { duration: 1.1, ease: "easeOut" as const },
+    transition: {
+      staggerChildren: 0.18,
+      delayChildren: 0.4,
+    },
   },
 };
-const fadeIn = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 1, ease: "easeOut" as const } },
+
+const fadeUpVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.0, ease: [0.25, 1, 0.5, 1] },
+  },
+};
+
+const textRevealVariants = {
+  hidden: { opacity: 0, y: 50 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  const bgScale   = useTransform(scrollYProgress, [0, 1], [1.08, 1.0]);
-  const bgY       = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-  const textY     = useTransform(scrollYProgress, [0, 1], ["0%", "28%"]);
-  const opacity   = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  // Trigger animations on client-side mount to avoid hydration mismatch/frozen animation states
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Parallax translation effect on scroll
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   return (
     <section
       id="hero"
       ref={ref}
-      className="relative w-full h-screen min-h-[680px] overflow-hidden"
+      className="relative w-full h-screen min-h-[720px] overflow-hidden bg-[#1e3329] flex flex-col justify-center"
     >
-      {/* ── Background Image ── */}
-      <motion.div
-        className="absolute inset-0 will-change-transform"
-        style={{ scale: bgScale, y: bgY }}
-      >
-        <Image
-          src="/hero.png"
-          alt="The Nest — Private luxury forest villa surrounded by tropical jungle"
-          fill
-          priority
-          quality={95}
-          className="object-cover object-center"
-          sizes="100vw"
-        />
-      </motion.div>
-
-      {/* ── Layered Overlays ── */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1e3329]/75 via-[#1e3329]/25 to-[#1e3329]/85 z-10" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1e3329]/55 via-transparent to-transparent z-10" />
-      {/* Vignette */}
-      <div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse at center, transparent 38%, rgba(30,51,41,0.65) 100%)" }}
-      />
-
-      {/* ── Hero Content ── */}
-      <motion.div
-        className="relative z-20 h-full flex flex-col items-center justify-center px-5 text-center"
-        style={{ y: textY, opacity }}
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        {/* Eyebrow */}
-        <motion.div variants={fadeIn} className="flex items-center gap-3 mb-7">
-          <span className="w-10 h-px bg-[#C9A96E]" />
-          <p className="section-label text-[#C9A96E]">Private Nature Retreat</p>
-          <span className="w-10 h-px bg-[#C9A96E]" />
-        </motion.div>
-
-        {/* Headline Line 1 */}
-        <div className="overflow-hidden mb-1">
-          <motion.h1
-            variants={item}
-            className="text-[clamp(2.8rem,7.5vw,7rem)] font-bold text-white leading-[1.02] tracking-tight"
-            style={{ fontFamily: "'Playfair Display', serif" }}
-          >
-            Where Nature
-          </motion.h1>
-        </div>
-
-        {/* Headline Line 2 */}
-        <div className="overflow-hidden mb-7">
-          <motion.h1
-            variants={item}
-            className="text-[clamp(2.8rem,7.5vw,7rem)] font-bold leading-[1.02] tracking-tight"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              background: "linear-gradient(120deg, #e8cc98 0%, #C9A96E 50%, #b8884a 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            Welcomes You Home
-          </motion.h1>
-        </div>
-
-        {/* Subtext */}
-        <motion.p
-          variants={fadeIn}
-          className="max-w-lg md:max-w-2xl text-sm md:text-base font-light leading-7 text-white/72 mb-11 tracking-wide"
-          style={{ fontFamily: "'Inter', sans-serif" }}
-        >
-          Escape into a private villa surrounded by forests, farm trails, bonfire nights,
-          natural streams, and unforgettable starlit experiences.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 items-center">
-          <Link href="/booking" className="btn-primary">
-            <span>Reserve Your Stay</span>
-          </Link>
-          <button
-            className="btn-outline"
-            onClick={() => document.querySelector("#story")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Explore The Nest
-          </button>
-        </motion.div>
-
-        {/* Stats Bar */}
+      {/* Background Image Container with Zoom-on-Load & Parallax */}
+      <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          variants={fadeIn}
-          className="absolute bottom-24 left-1/2 -translate-x-1/2 hidden sm:flex items-center gap-10 lg:gap-16"
+          className="relative w-full h-full will-change-transform"
+          style={{ y: bgY }}
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1.0 }}
+          transition={{ duration: 2.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          {[
-            { value: "2 Acres", label: "Pristine Nature" },
-            { value: "12", label: "Private Villas" },
-            { value: "4.9 ★", label: "Guest Rating" },
-          ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p
-                className="text-2xl font-semibold text-[#C9A96E] leading-none"
-                style={{ fontFamily: "'Playfair Display', serif" }}
+          <Image
+            src="/hero.png"
+            alt="The Nest Private Luxury Nature Retreat"
+            fill
+            priority
+            quality={95}
+            className="object-cover object-right"
+            sizes="100vw"
+          />
+        </motion.div>
+      </div>
+
+      {/* Luxury Asymmetrical Overlays */}
+      {/* Desktop Left-aligned shadow for high readability while keeping the right side bright and vibrant */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1e3329]/85 via-[#1e3329]/45 to-transparent z-10 hidden lg:block" />
+      {/* Mobile/Tablet General Semi-transparent Shade */}
+      <div className="absolute inset-0 bg-[#1e3329]/55 z-10 lg:hidden" />
+      {/* Vignette Overlay for cinematic top/bottom shadows */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1e3329]/95 via-[#1e3329]/10 to-[#1e3329]/40 z-10 pointer-events-none" />
+
+      {/* Main Editorial Content */}
+      <div className="relative z-20 container-luxury w-full">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isMounted ? "show" : "hidden"}
+          className="flex flex-col items-center text-center lg:items-start lg:text-left max-w-xl md:max-w-2xl lg:max-w-3xl"
+        >
+          {/* Eyebrow */}
+          <motion.div variants={fadeUpVariants} className="flex items-center gap-3.5 mb-6">
+            <span className="w-8 h-px bg-[#C9A96E]" />
+            <p className="text-[0.62rem] md:text-[0.68rem] tracking-[0.35em] uppercase font-bold text-[#C9A96E]">
+              Private Nature Retreat
+            </p>
+            <span className="w-8 h-px bg-[#C9A96E] lg:hidden" />
+          </motion.div>
+
+          {/* Headline with Staggered Text Reveal */}
+          <div className="overflow-hidden mb-6">
+            <motion.h1
+              variants={textRevealVariants}
+              className="text-4xl md:text-6xl lg:text-[4.2rem] xl:text-[4.8rem] font-light text-white leading-[1.12] tracking-tight"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
+              Escape Into <br className="hidden md:inline" />
+              <span className="italic font-normal text-[#C9A96E]">Nature&apos;s Quiet Luxury</span>
+            </motion.h1>
+          </div>
+
+          {/* Subtext */}
+          <motion.p
+            variants={fadeUpVariants}
+            className="max-w-lg lg:max-w-xl text-sm md:text-base font-light leading-relaxed text-white/80 mb-11 tracking-wide"
+          >
+            A private villa retreat surrounded by forests, bonfire evenings, farm trails, natural streams, and unforgettable starlit experiences.
+          </motion.p>
+
+          {/* Call to Action Buttons */}
+          <motion.div variants={fadeUpVariants} className="flex flex-col sm:flex-row gap-5 items-center w-full sm:w-auto">
+            <Link
+              href="/booking"
+              className="w-full sm:w-auto px-9 py-4 bg-[#C9A96E] text-[#1e3329] text-[0.7rem] tracking-[0.25em] uppercase font-bold hover:text-[#1e3329] transition-colors duration-500 shadow-lg relative overflow-hidden group text-center"
+            >
+              <span className="relative z-10">Reserve Your Stay</span>
+              <span className="absolute inset-0 w-full h-full bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0" />
+            </Link>
+            <button
+              className="w-full sm:w-auto px-7 py-4 border-b border-white/20 text-white hover:border-[#C9A96E] text-[0.7rem] tracking-[0.25em] uppercase font-bold transition-all duration-400 group text-center"
+              onClick={() => {
+                const storySec = document.querySelector("#story");
+                if (storySec) {
+                  storySec.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              <span className="group-hover:text-[#C9A96E] transition-colors duration-400">Explore The Retreat</span>
+            </button>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Statistics Bar - Luxury Responsive Layout */}
+      <motion.div
+        variants={fadeUpVariants}
+        initial="hidden"
+        animate={isMounted ? "show" : "hidden"}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-28 md:bottom-12 left-1/2 -translate-x-1/2 md:left-auto md:right-16 md:translate-x-0 z-20 flex items-center gap-6 md:gap-10 lg:gap-14 bg-[#1e3329]/40 backdrop-blur-md border border-white/5 py-3.5 px-6 md:py-4 md:px-8 shadow-2xl rounded-sm"
+      >
+        {[
+          { value: "2 Acres", label: "Pristine Nature" },
+          { value: "12", label: "Private Villas" },
+          { value: "4.9 ★", label: "Guest Rating" },
+        ].map((s, index) => (
+          <div key={s.label} className="flex items-center gap-6 md:gap-10">
+            {index > 0 && <div className="w-[1px] h-5 md:h-6 bg-[#C9A96E]/20" />}
+            <div className="text-center md:text-left">
+              <motion.p
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.5 + index * 0.15, duration: 0.6 }}
+                className="text-lg md:text-xl lg:text-2xl font-bold text-[#C9A96E]"
+                style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
               >
                 {s.value}
-              </p>
-              <p className="text-[0.6rem] tracking-[0.25em] uppercase text-white/45 mt-1.5">
+              </motion.p>
+              <p className="text-[0.52rem] md:text-[0.58rem] tracking-[0.22em] uppercase text-white/50 mt-1 font-semibold">
                 {s.label}
               </p>
             </div>
-          ))}
-        </motion.div>
+          </div>
+        ))}
       </motion.div>
 
-      {/* ── Scroll Indicator ── */}
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.8, duration: 0.8 }}
-        className="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 cursor-pointer animate-float"
-        onClick={() => document.querySelector("#features")?.scrollIntoView({ behavior: "smooth" })}
+        animate={isMounted ? "show" : "hidden"}
+        transition={{ delay: 2.2, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 cursor-pointer"
+        onClick={() => {
+          const featuresSec = document.querySelector("#features");
+          if (featuresSec) {
+            featuresSec.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
       >
-        <p className="text-[0.58rem] tracking-[0.4em] uppercase text-white/40">Scroll</p>
-        <div className="relative w-px h-12 bg-white/15 overflow-hidden">
+        <span className="text-[0.58rem] tracking-[0.45em] uppercase text-white/40 font-semibold select-none">Scroll</span>
+        <div className="relative w-[1px] h-12 bg-white/10 overflow-hidden">
           <motion.div
             className="absolute left-0 w-full bg-[#C9A96E]"
             animate={{ top: ["-30%", "130%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 2.0, repeat: Infinity, ease: "easeInOut" }}
             style={{ height: "30%" }}
           />
         </div>
-        <ArrowDown size={12} className="text-white/30" />
       </motion.div>
     </section>
   );
 }
-

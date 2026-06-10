@@ -90,7 +90,7 @@ export default function AccommodationSection() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.13, duration: 1, ease: "easeOut" as const }}
               className={`group grid lg:grid-cols-2 overflow-hidden bg-white border border-[#6B4F3A]/10 hover:border-[#2F4F3E]/25 hover:shadow-2xl transition-all duration-600 ${
-                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
+                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : "p-20"
               }`}
             >
               {/* Image */}

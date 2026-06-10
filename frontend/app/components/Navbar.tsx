@@ -64,9 +64,9 @@ export default function Navbar() {
                 <Image
                   src="/logo.png"
                   alt="Hakki Goodu Logo"
-                  width={42}
-                  height={42}
-                  className="object-contain transition-transform duration-500 hover:rotate-12"
+                  width={100}
+                  height={100}
+                  className="object-contain transition-transform duration-500 hover:scale-105"
                 />
                 <div>
                   <p

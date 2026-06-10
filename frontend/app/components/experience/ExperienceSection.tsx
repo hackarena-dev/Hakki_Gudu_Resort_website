@@ -95,7 +95,7 @@ export default function ExperienceSection() {
               key={exp.id}
               initial={{ opacity: 0, y: 50 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.1, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: i * 0.1, duration: 0.9, ease: "easeOut" as const }}
               className="group relative overflow-hidden cursor-pointer"
               onMouseEnter={() => setActive(exp.id)}
               onMouseLeave={() => setActive(null)}
@@ -154,3 +154,4 @@ export default function ExperienceSection() {
     </section>
   );
 }
+

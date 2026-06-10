@@ -131,7 +131,7 @@ export default function GallerySection() {
               initial={{ scale: 0.88, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.88, opacity: 0 }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.4, ease: "easeOut" as const }}
               className="relative w-full max-w-4xl aspect-[4/3]"
               onClick={(e) => e.stopPropagation()}
             >
@@ -155,3 +155,4 @@ export default function GallerySection() {
     </section>
   );
 }
+

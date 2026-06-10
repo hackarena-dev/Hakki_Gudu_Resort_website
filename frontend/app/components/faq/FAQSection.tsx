@@ -65,7 +65,7 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: "easeOut" as const }}
             className="overflow-hidden"
           >
             <p className="text-sm text-[#2C2C2C]/60 leading-7 pb-6 pr-14">
@@ -91,7 +91,7 @@ export default function FAQSection() {
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, ease: "easeOut" as const }}
             className="lg:sticky lg:top-28"
           >
             <p className="section-label mb-5">FAQ</p>
@@ -120,7 +120,7 @@ export default function FAQSection() {
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 0.1, ease: "easeOut" as const }}
           >
             {FAQS.map((faq, i) => (
               <FAQItem
@@ -137,3 +137,4 @@ export default function FAQSection() {
     </section>
   );
 }
+

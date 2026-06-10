@@ -165,7 +165,7 @@ export default function BookingPage() {
                 initial={{ opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -24 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.4, ease: "easeOut" as const }}
               >
                 {step === 0 && <StepDates form={form} set={set} nights={nights} />}
                 {step === 1 && <StepRooms form={form} set={set} rooms={ROOMS} />}
@@ -548,7 +548,7 @@ function ConfirmationScreen({ form, room, nights, total }: {
       <motion.div
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className="bg-white border border-[#6B4F3A]/15 max-w-lg w-full p-10 text-center shadow-2xl"
       >
         {/* Check circle */}
@@ -598,3 +598,4 @@ function ConfirmationScreen({ form, room, nights, total }: {
     </div>
   );
 }
+

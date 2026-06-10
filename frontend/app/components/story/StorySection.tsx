@@ -31,7 +31,7 @@ export default function StorySection() {
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.1, ease: "easeOut" as const }}
             className="relative"
           >
             {/* Main image */}
@@ -51,7 +51,7 @@ export default function StorySection() {
             <motion.div
               initial={{ opacity: 0, y: 30, x: 30 }}
               animate={inView ? { opacity: 1, y: 0, x: 0 } : {}}
-              transition={{ delay: 0.4, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ delay: 0.4, duration: 0.9, ease: "easeOut" as const }}
               className="absolute -bottom-8 -right-4 lg:-right-10 w-40 lg:w-52 aspect-square overflow-hidden border-4 border-[#FAF7F2] shadow-2xl"
             >
               <Image
@@ -87,7 +87,7 @@ export default function StorySection() {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.1, delay: 0.15, ease: "easeOut" as const }}
             className="flex flex-col gap-7 mt-10 lg:mt-0"
           >
             <h2
@@ -144,3 +144,4 @@ export default function StorySection() {
     </section>
   );
 }
+

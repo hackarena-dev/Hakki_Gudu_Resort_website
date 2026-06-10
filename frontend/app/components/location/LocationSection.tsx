@@ -75,7 +75,7 @@ export default function LocationSection() {
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, ease: "easeOut" as const }}
             className="relative overflow-hidden bg-[#2C2C2C]/30 border border-white/10"
             style={{ minHeight: "380px" }}
           >
@@ -125,7 +125,7 @@ export default function LocationSection() {
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, delay: 0.1, ease: "easeOut" as const }}
             className="grid grid-cols-1 sm:grid-cols-2 gap-4"
           >
             {CONTACTS.map((c, i) => {
@@ -185,3 +185,4 @@ export default function LocationSection() {
     </section>
   );
 }
+

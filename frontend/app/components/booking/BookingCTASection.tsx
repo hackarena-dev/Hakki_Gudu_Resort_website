@@ -36,7 +36,7 @@ export default function BookingCTASection() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.9, ease: "easeOut" as const }}
         >
           <p className="section-label text-[#C9A96E] mb-5">Begin Your Journey</p>
           <h2
@@ -59,3 +59,4 @@ export default function BookingCTASection() {
     </section>
   );
 }
+

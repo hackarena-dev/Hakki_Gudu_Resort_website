@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,8 +27,28 @@ export const metadata: Metadata = {
     description: "Luxury forest villa escape. Bonfires, streams, stars, and silence.",
   },
   robots: { index: true, follow: true },
-  viewport: "width=device-width, initial-scale=1",
 };
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="icon" href="/favicon.ico" />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+
 
 export default function RootLayout({
   children,

@@ -46,7 +46,7 @@ const cardAnim = {
   hidden: { opacity: 0, y: 40 },
   show: {
     opacity: 1, y: 0,
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.8, ease: "easeOut" as const },
   },
 };
 
@@ -61,7 +61,7 @@ export default function FeaturesSection() {
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, ease: "easeOut" as const }}
           className="text-center mb-14 lg:mb-20"
         >
           <p className="section-label mb-4">Why The Nest</p>
@@ -120,3 +120,4 @@ export default function FeaturesSection() {
     </section>
   );
 }
+

@@ -43,7 +43,7 @@ export default function Navbar() {
       <motion.header
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: hidden ? -80 : 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.6, ease: "easeOut" as const }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled
             ? "bg-[#1e3329]/92 backdrop-blur-xl border-b border-white/8 shadow-lg"
@@ -165,3 +165,4 @@ export default function Navbar() {
     </>
   );
 }
+

@@ -89,77 +89,91 @@ export default function AccommodationSection() {
               initial={{ opacity: 0, y: 60 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.13, duration: 1, ease: "easeOut" as const }}
-              className={`group grid lg:grid-cols-2 overflow-hidden bg-white border border-[#6B4F3A]/10 hover:border-[#2F4F3E]/25 hover:shadow-2xl transition-all duration-600 ${
-                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : "p-20"
-              }`}
+              className="group grid grid-cols-1 lg:grid-cols-2 overflow-hidden bg-white border border-[#6B4F3A]/10 hover:border-[#2F4F3E]/20 hover:shadow-2xl transition-all duration-500 rounded-sm"
             >
-              {/* Image */}
-              <div className="relative aspect-[16/10] lg:aspect-auto overflow-hidden">
+              {/* Image Column */}
+              <div
+                className={`relative h-[260px] sm:h-[350px] lg:h-auto w-full overflow-hidden ${
+                  i % 2 === 1 ? "lg:order-2" : ""
+                }`}
+              >
                 <Image
                   src={room.image}
                   alt={room.name}
                   fill
-                  className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-106"
+                  className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#2F4F3E]/20" />
-                {/* Tier */}
-                <div className="absolute top-5 left-5 px-3.5 py-1.5 bg-[#2F4F3E] text-white text-[0.58rem] tracking-[0.3em] uppercase font-medium">
+                <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-transparent to-[#2F4F3E]/15" />
+                {/* Tier Tag */}
+                <div className="absolute top-5 left-5 px-3.5 py-1.5 bg-[#2F4F3E]/90 backdrop-blur-sm text-white text-[0.58rem] tracking-[0.3em] uppercase font-semibold">
                   {room.tier}
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="flex flex-col justify-between p-7 lg:p-10 xl:p-14">
+              {/* Content Column */}
+              <div
+                className={`flex flex-col justify-between p-6 sm:p-8 md:p-10 lg:p-12 xl:p-16 ${
+                  i % 2 === 1 ? "lg:order-1" : ""
+                }`}
+              >
                 <div>
-                  {/* Meta */}
-                  <div className="flex items-center gap-4 mb-4 text-[#6B4F3A]/60 text-xs">
+                  {/* Meta Bar */}
+                  <div className="flex items-center gap-4 mb-4 text-[#6B4F3A]/70 text-[0.68rem] uppercase tracking-wider font-semibold">
                     <span className="flex items-center gap-1.5">
-                      <Users size={13} /> {room.guests}
+                      <Users size={14} className="text-[#2F4F3E]" /> {room.guests}
                     </span>
-                    <span className="w-px h-3 bg-current opacity-30" />
+                    <span className="w-px h-3 bg-[#6B4F3A]/20" />
                     <span className="flex items-center gap-1.5">
-                      <Maximize size={13} /> {room.size}
+                      <Maximize size={14} className="text-[#2F4F3E]" /> {room.size}
                     </span>
                   </div>
 
+                  {/* Title */}
                   <h3
-                    className="text-2xl lg:text-3xl font-bold text-[#2C2C2C] mb-4 group-hover:text-[#2F4F3E] transition-colors duration-400"
+                    className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-bold text-[#2C2C2C] mb-4 group-hover:text-[#2F4F3E] transition-colors duration-400"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
                     {room.name}
                   </h3>
-                  <p className="text-sm text-[#2C2C2C]/55 leading-7 mb-7">
+
+                  {/* Description */}
+                  <p className="text-sm text-[#2C2C2C]/65 leading-relaxed font-light mb-6 lg:mb-8">
                     {room.desc}
                   </p>
 
-                  {/* Amenities */}
-                  <div className="grid grid-cols-2 gap-y-2.5 gap-x-4 mb-8">
+                  {/* Amenities List */}
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-8">
                     {room.amenities.map((a) => (
-                      <div key={a} className="flex items-center gap-2">
-                        <div className="w-1 h-1 bg-[#B56A4A] rounded-full flex-shrink-0" />
-                        <span className="text-xs text-[#2C2C2C]/55">{a}</span>
+                      <div key={a} className="flex items-center gap-2.5">
+                        <span className="w-1.5 h-1.5 bg-[#C9A96E] rounded-full flex-shrink-0" />
+                        <span className="text-xs text-[#2C2C2C]/75 font-medium tracking-wide">{a}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Price + CTA */}
-                <div className="flex items-end justify-between pt-6 border-t border-[#6B4F3A]/12">
+                {/* Pricing & CTA */}
+                <div className="flex items-center justify-between pt-6 border-t border-[#6B4F3A]/12 mt-auto">
                   <div>
-                    <p
-                      className="text-3xl font-bold text-[#2C2C2C] leading-none"
-                      style={{ fontFamily: "'Playfair Display', serif" }}
-                    >
-                      {room.price}
-                    </p>
-                    <p className="text-[0.65rem] text-[#6B4F3A]/55 mt-1 tracking-wide">
-                      {room.period} · All meals included
+                    <div className="flex items-baseline gap-1">
+                      <span
+                        className="text-3xl sm:text-4xl font-bold text-[#2C2C2C]"
+                        style={{ fontFamily: "'Playfair Display', serif" }}
+                      >
+                        {room.price}
+                      </span>
+                      <span className="text-xs text-[#6B4F3A]/70 font-semibold">
+                        /{room.period.replace("per ", "")}
+                      </span>
+                    </div>
+                    <p className="text-[0.6rem] sm:text-[0.65rem] text-[#B56A4A] mt-1.5 tracking-widest uppercase font-bold">
+                      All organic meals included
                     </p>
                   </div>
                   <Link
                     href="/booking"
-                    className="px-7 py-3.5 bg-[#2F4F3E] text-white text-[0.63rem] tracking-[0.2em] uppercase font-medium hover:bg-[#6B4F3A] transition-colors duration-400"
+                    className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#2F4F3E] text-white text-[0.68rem] tracking-[0.22em] uppercase font-bold hover:bg-[#6B4F3A] transition-all duration-400 shadow-md hover:shadow-lg text-center"
                   >
                     Reserve
                   </Link>

@@ -65,7 +65,7 @@ export default function ExperienceSection() {
       id="experiences"
       ref={ref}
       className="section-pad overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #2F4F3E 0%, #1e3329 100%)" }}
+      style={{ background: "linear-gradient(180deg, #FAF7F2 0%, #F5F1E8 100%)" }}
     >
       <div className="container-luxury">
         {/* Header */}
@@ -75,15 +75,15 @@ export default function ExperienceSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-14 lg:mb-20"
         >
-          <p className="section-label text-[#C9A96E] mb-4">Curated Moments</p>
+          <p className="section-label text-[#B56A4A] mb-4">Curated Moments</p>
           <h2
-            className="text-4xl md:text-5xl font-bold text-white leading-tight"
+            className="text-4xl md:text-5xl font-bold text-[#2C2C2C] leading-tight"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             The Experiences That{" "}
-            <em className="italic text-[#C9A96E]">Stay With You</em>
+            <em className="italic text-[#2F4F3E]">Stay With You</em>
           </h2>
-          <p className="mt-5 text-sm text-[#FAF7F2]/75 max-w-lg mx-auto leading-relaxed">
+          <p className="mt-5 text-sm text-[#6B4F3A]/75 max-w-lg mx-auto leading-relaxed">
             Every experience at Hakki Goodu is curated to create a genuine connection with the land, the people, and yourself.
           </p>
         </motion.div>
@@ -96,7 +96,7 @@ export default function ExperienceSection() {
             return (
               <div
                 key={exp.id}
-                className="border-b border-white/10 last:border-0 py-8 lg:py-14"
+                className="border-b border-[#6B4F3A]/10 last:border-0 py-8 lg:py-14"
               >
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
                   {/* Image Container */}
@@ -105,7 +105,7 @@ export default function ExperienceSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
-                    className={`group relative overflow-hidden aspect-[3/2] w-full max-w-[480px] mx-auto shadow-2xl border border-white/5 ${
+                    className={`group relative overflow-hidden aspect-[3/2] w-full max-w-[480px] mx-auto shadow-2xl border border-[#6B4F3A]/5 ${
                       isReversed ? "lg:order-2" : ""
                     }`}
                   >
@@ -117,7 +117,7 @@ export default function ExperienceSection() {
                       sizes="(max-width: 1024px) 100vw, 45vw"
                     />
                     {/* Soft tint overlay */}
-                    <div className="absolute inset-0 bg-black/15 group-hover:bg-black/5 transition-colors duration-500" />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-500" />
                     
                     {/* Tag Badge */}
                     <div
@@ -143,21 +143,21 @@ export default function ExperienceSection() {
                       {exp.tag} Experience
                     </span>
                     <h3
-                      className="text-2xl md:text-3.5xl font-bold text-white mb-4 tracking-wide transition-colors duration-300 hover:text-[#C9A96E]"
+                      className="text-2xl md:text-3.5xl font-bold text-[#2C2C2C] mb-4 tracking-wide transition-colors duration-300 group-hover:text-[#2F4F3E]"
                       style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                     >
                       {exp.title}
                     </h3>
                     
-                    <div className="w-12 h-[1px] bg-[#C9A96E]/50 mb-5" />
+                    <div className="w-12 h-[1px] bg-[#2F4F3E]/20 mb-5" />
 
-                    <p className="text-sm leading-relaxed text-[#FAF7F2]/80 mb-6">
+                    <p className="text-sm leading-relaxed text-[#2C2C2C]/70 mb-6">
                       {exp.desc}
                     </p>
                     
                     <a
                       href="#booking"
-                      className="group/link inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.25em] font-semibold text-[#C9A96E] hover:text-white transition-colors duration-300"
+                      className="group/link inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.25em] font-semibold text-[#2F4F3E] hover:text-[#B56A4A] transition-colors duration-300"
                     >
                       Inquire Experience
                       <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
@@ -183,7 +183,7 @@ export default function ExperienceSection() {
                 setExpanded(true);
               }
             }}
-            className="btn-outline border-[#C9A96E]/40 text-[#C9A96E]"
+            className="btn-outline border-[#2F4F3E]/30 text-[#2F4F3E] hover:border-[#2F4F3E] hover:text-[#2F4F3E]"
           >
             <span>{expanded ? "Show Less" : "Explore All Experiences"}</span>
           </button>

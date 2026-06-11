@@ -89,7 +89,7 @@ export default function AccommodationSection() {
               initial={{ opacity: 0, y: 60 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.13, duration: 1, ease: "easeOut" as const }}
-              className="group grid grid-cols-1 lg:grid-cols-2 overflow-hidden bg-white border border-[#6B4F3A]/10 hover:border-[#2F4F3E]/20 hover:shadow-2xl transition-all duration-500 rounded-sm"
+              className="group grid grid-cols-1 lg:grid-cols-2 overflow-hidden bg-white border border-[#8B5A3C]/10 hover:border-[#8B5A3C]/20 hover:shadow-2xl transition-all duration-500 rounded-sm"
             >
               {/* Image Column */}
               <div
@@ -119,13 +119,13 @@ export default function AccommodationSection() {
               >
                 <div>
                   {/* Meta Bar */}
-                  <div className="flex items-center gap-4 mb-4 text-[#6B4F3A]/70 text-[0.68rem] uppercase tracking-wider font-semibold">
+                  <div className="flex items-center gap-4 mb-4 text-[#8B5A3C]/70 text-[0.68rem] uppercase tracking-wider font-semibold">
                     <span className="flex items-center gap-1.5">
-                      <Users size={14} className="text-[#2F4F3E]" /> {room.guests}
+                      <Users size={14} className="text-[#8B5A3C]" /> {room.guests}
                     </span>
-                    <span className="w-px h-3 bg-[#6B4F3A]/20" />
+                    <span className="w-px h-3 bg-[#8B5A3C]/20" />
                     <span className="flex items-center gap-1.5">
-                      <Maximize size={14} className="text-[#2F4F3E]" /> {room.size}
+                      <Maximize size={14} className="text-[#8B5A3C]" /> {room.size}
                     </span>
                   </div>
 
@@ -146,7 +146,7 @@ export default function AccommodationSection() {
                   <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-8">
                     {room.amenities.map((a) => (
                       <div key={a} className="flex items-center gap-2.5">
-                        <span className="w-1.5 h-1.5 bg-[#C9A96E] rounded-full flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 bg-[#8B5A3C] rounded-full flex-shrink-0" />
                         <span className="text-xs text-[#2C2C2C]/75 font-medium tracking-wide">{a}</span>
                       </div>
                     ))}
@@ -154,7 +154,7 @@ export default function AccommodationSection() {
                 </div>
 
                 {/* Pricing & CTA */}
-                <div className="flex items-center justify-between pt-6 border-t border-[#6B4F3A]/12 mt-auto">
+                <div className="flex items-center justify-between pt-6 border-t border-[#8B5A3C]/12 mt-auto">
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span
@@ -163,7 +163,7 @@ export default function AccommodationSection() {
                       >
                         {room.price}
                       </span>
-                      <span className="text-xs text-[#6B4F3A]/70 font-semibold">
+                      <span className="text-xs text-[#8B5A3C]/70 font-semibold">
                         /{room.period.replace("per ", "")}
                       </span>
                     </div>
@@ -173,7 +173,7 @@ export default function AccommodationSection() {
                   </div>
                   <Link
                     href="/booking"
-                    className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#2F4F3E] text-white text-[0.68rem] tracking-[0.22em] uppercase font-bold hover:bg-[#6B4F3A] transition-all duration-400 shadow-md hover:shadow-lg text-center"
+                    className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#8B5A3C] text-white text-[0.68rem] tracking-[0.22em] uppercase font-bold hover:bg-[#A9724F] transition-all duration-400 shadow-md hover:shadow-lg text-center"
                   >
                     Reserve
                   </Link>

@@ -36,9 +36,9 @@ export default function PageLoader() {
           {/* Elegant Luxury Double-ring Loader */}
           <div className="relative w-16 h-16">
             {/* Outer pulsing gold circle */}
-            <div className="absolute inset-0 border border-[#C9A96E]/40 rounded-full animate-ping opacity-60" />
+            <div className="absolute inset-0 border border-[#B98958]/40 rounded-full animate-ping opacity-60" />
             {/* Inner spinning gold crescent */}
-            <div className="absolute inset-2 border-2 border-t-[#C9A96E] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin" />
+            <div className="absolute inset-2 border-2 border-t-[#B98958] border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin" />
           </div>
         </motion.div>
       )}

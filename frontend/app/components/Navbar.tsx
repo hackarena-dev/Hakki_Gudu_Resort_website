@@ -45,7 +45,7 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-[#1e3329]/80 backdrop-blur-xl border-b border-white/5 shadow-lg h-[70px]"
+            ? "bg-[#1e3329]/75 backdrop-blur-xl border-b border-[#8B5A3C]/10 shadow-lg h-[70px]"
             : "bg-transparent h-[86px]"
         }`}
       >
@@ -75,7 +75,7 @@ export default function Navbar() {
                   >
                     Hakki Goodu
                   </p>
-                  <p className="text-[0.55rem] tracking-[0.42em] text-[#C9A96E] uppercase font-semibold mt-1">
+                  <p className="text-[0.55rem] tracking-[0.42em] text-[#8B5A3C] uppercase font-bold mt-1">
                     Nature Retreat
                   </p>
                 </div>
@@ -83,7 +83,7 @@ export default function Navbar() {
             </motion.div>
 
             {/* Desktop Nav - Generous gaps and elegant styles */}
-            <nav className="hidden lg:flex items-center gap-8 xl:gap-11">
+            <nav className="hidden lg:flex items-center gap-10 xl:gap-14">
               {NAV_LINKS.map((link, i) => (
                 <motion.button
                   key={link.href}
@@ -91,10 +91,10 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.08, duration: 0.6 }}
                   onClick={() => scrollTo(link.href)}
-                  className="relative text-[0.7rem] tracking-[0.25em] uppercase font-semibold text-white/80 hover:text-white transition-colors duration-300 pb-1.5 group"
+                  className="relative text-[0.7rem] tracking-[0.25em] uppercase font-semibold text-[#FAF7F2]/80 hover:text-[#8B5A3C] transition-colors duration-300 pb-1.5 group"
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-[#C9A96E] group-hover:w-full transition-all duration-400 ease-out" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-[#8B5A3C] group-hover:w-full transition-all duration-400 ease-out" />
                 </motion.button>
               ))}
               <motion.div
@@ -105,10 +105,10 @@ export default function Navbar() {
               >
                 <Link
                   href="/booking"
-                  className="px-6 py-3 bg-[#C9A96E] text-[#1e3329] text-[0.68rem] tracking-[0.22em] uppercase font-bold hover:text-[#1e3329] transition-colors duration-500 shadow-md hover:shadow-xl relative overflow-hidden group block"
+                  className="px-6 py-3 bg-[#8B5A3C] text-white text-[0.68rem] tracking-[0.22em] uppercase font-bold hover:text-white transition-all duration-500 hover:bg-[#A9724F] shadow-md hover:shadow-xl relative overflow-hidden group block"
                 >
                   <span className="relative z-10">Reserve Your Stay</span>
-                  <span className="absolute inset-0 w-full h-full bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0" />
+                  <span className="absolute inset-0 w-full h-full bg-[#A9724F] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out z-0" />
                 </Link>
               </motion.div>
             </nav>
@@ -140,8 +140,8 @@ export default function Navbar() {
               className="absolute inset-0 opacity-5 pointer-events-none"
               style={{
                 backgroundImage: `
-                  linear-gradient(rgba(201,169,110,0.3) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(201,169,110,0.3) 1px, transparent 1px)
+                  linear-gradient(rgba(139,90,60,0.3) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(139,90,60,0.3) 1px, transparent 1px)
                 `,
                 backgroundSize: "60px 60px",
               }}
@@ -156,7 +156,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, y: 30 }}
                   transition={{ delay: i * 0.08, ease: "easeOut" }}
                   onClick={() => scrollTo(link.href)}
-                  className="text-3xl md:text-4xl font-medium tracking-wide text-white hover:text-[#C9A96E] transition-colors"
+                  className="text-3xl md:text-4xl font-medium tracking-wide text-white hover:text-[#8B5A3C] transition-colors"
                   style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                 >
                   {link.label}
@@ -174,7 +174,7 @@ export default function Navbar() {
               <Link
                 href="/booking"
                 onClick={() => setMenuOpen(false)}
-                className="px-10 py-4 bg-[#C9A96E] text-[#1e3329] text-xs tracking-[0.25em] uppercase font-bold shadow-lg hover:bg-white transition-colors duration-500 block"
+                className="px-10 py-4 bg-[#8B5A3C] text-white text-xs tracking-[0.25em] uppercase font-bold shadow-lg hover:bg-[#A9724F] transition-colors duration-500 block"
               >
                 Reserve Your Stay
               </Link>

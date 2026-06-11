@@ -120,7 +120,7 @@ export default function BookingPage() {
           <Link href="/" className="absolute top-5 left-5 md:left-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-xs tracking-widest uppercase">
             <ChevronLeft size={14} /> Back to Home
           </Link>
-          <p className="section-label text-[#C9A96E] mb-3">Private Nature Retreat</p>
+          <p className="section-label text-[#B98958] mb-3">Private Nature Retreat</p>
           <h1 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif", color: '#ffffff' }}>
             Reserve Your Nest
           </h1>
@@ -128,7 +128,7 @@ export default function BookingPage() {
       </div>
 
       {/* ── Step Progress ── */}
-      <div className="bg-white border-b border-[#6B4F3A]/10">
+      <div className="bg-white border-b border-[#8B5A3C]/10">
         <div className="container-luxury py-4">
           <div className="flex items-center justify-center gap-0">
             {STEPS.map((s, i) => (
@@ -137,16 +137,16 @@ export default function BookingPage() {
                   <div className={`w-7 h-7 flex items-center justify-center text-xs font-semibold transition-all duration-300 ${
                     i < step ? "bg-[#2F4F3E] text-white" :
                     i === step ? "bg-[#2F4F3E] text-white ring-2 ring-[#2F4F3E]/25 ring-offset-2" :
-                    "bg-[#F5F1E8] text-[#6B4F3A]/50"
+                    "bg-[#F5F1E8] text-[#8B5A3C]/50"
                   }`}>
                     {i < step ? <Check size={12} /> : i + 1}
                   </div>
-                  <span className={`hidden sm:block text-xs tracking-wide transition-colors ${i === step ? "text-[#2F4F3E] font-medium" : "text-[#6B4F3A]/50"}`}>
+                  <span className={`hidden sm:block text-xs tracking-wide transition-colors ${i === step ? "text-[#2F4F3E] font-medium" : "text-[#8B5A3C]/50"}`}>
                     {s}
                   </span>
                 </div>
                 {i < STEPS.length - 1 && (
-                  <div className={`w-8 md:w-16 h-px mx-3 transition-colors ${i < step ? "bg-[#2F4F3E]" : "bg-[#6B4F3A]/15"}`} />
+                  <div className={`w-8 md:w-16 h-px mx-3 transition-colors ${i < step ? "bg-[#2F4F3E]" : "bg-[#8B5A3C]/15"}`} />
                 )}
               </div>
             ))}
@@ -175,9 +175,9 @@ export default function BookingPage() {
             </AnimatePresence>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between mt-10 pt-7 border-t border-[#6B4F3A]/12">
+            <div className="flex items-center justify-between mt-10 pt-7 border-t border-[#8B5A3C]/12">
               {step > 0 ? (
-                <button onClick={back} className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#6B4F3A] hover:text-[#2F4F3E] transition-colors">
+                <button onClick={back} className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#8B5A3C] hover:text-[#2F4F3E] transition-colors">
                   <ChevronLeft size={14} /> Back
                 </button>
               ) : (
@@ -186,7 +186,7 @@ export default function BookingPage() {
               <button
                 onClick={next}
                 disabled={!canNext()}
-                className="px-10 py-3.5 bg-[#2F4F3E] text-white text-[0.67rem] tracking-[0.25em] uppercase font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#6B4F3A] transition-all duration-400"
+                className="px-10 py-3.5 bg-[#8B5A3C] text-white text-[0.67rem] tracking-[0.25em] uppercase font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#A9724F] transition-all duration-400"
               >
                 {step === 3 ? "Confirm Reservation" : "Continue"}
               </button>
@@ -211,7 +211,7 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
       <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
         When Are You Visiting?
       </h2>
-      <p className="text-sm text-[#6B4F3A]/60 mb-8">Select your dates and number of guests.</p>
+      <p className="text-sm text-[#8B5A3C]/60 mb-8">Select your dates and number of guests.</p>
 
       {/* Date Pickers */}
       <div className="grid sm:grid-cols-2 gap-5 mb-8">
@@ -220,7 +220,7 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
           { label: "Check-Out Date", key: "checkout" as const, min: form.checkin || today },
         ].map(({ label, key, min }) => (
           <div key={key} className="flex flex-col gap-2">
-            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#6B4F3A] font-medium flex items-center gap-1.5">
+            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-medium flex items-center gap-1.5">
               <Calendar size={11} /> {label}
             </label>
             <input
@@ -253,20 +253,20 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
           { label: "Children (under 12)", key: "children" as const, min: 0, max: 10 },
         ].map(({ label, key, min, max }) => (
           <div key={key} className="flex flex-col gap-2">
-            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#6B4F3A] font-medium flex items-center gap-1.5">
+            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-medium flex items-center gap-1.5">
               <Users size={11} /> {label}
             </label>
-            <div className="flex items-center border border-[#6B4F3A]/20 bg-[#F5F1E8]">
+            <div className="flex items-center border border-[#8B5A3C]/20 bg-[#F5F1E8]">
               <button
                 onClick={() => set(key, Math.max(min, (form[key] as number) - 1))}
-                className="w-11 h-11 flex items-center justify-center text-[#6B4F3A] hover:bg-[#6B4F3A]/10 transition-colors"
+                className="w-11 h-11 flex items-center justify-center text-[#8B5A3C] hover:bg-[#8B5A3C]/10 transition-colors"
               >
                 <Minus size={14} />
               </button>
               <span className="flex-1 text-center text-sm font-medium text-[#2C2C2C]">{form[key]}</span>
               <button
                 onClick={() => set(key, Math.min(max, (form[key] as number) + 1))}
-                className="w-11 h-11 flex items-center justify-center text-[#6B4F3A] hover:bg-[#6B4F3A]/10 transition-colors"
+                className="w-11 h-11 flex items-center justify-center text-[#8B5A3C] hover:bg-[#8B5A3C]/10 transition-colors"
               >
                 <Plus size={14} />
               </button>
@@ -285,7 +285,7 @@ function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormDa
       <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
         Choose Your Sanctuary
       </h2>
-      <p className="text-sm text-[#6B4F3A]/60 mb-8">All villas are exclusively yours for the duration of your stay.</p>
+      <p className="text-sm text-[#8B5A3C]/60 mb-8">All villas are exclusively yours for the duration of your stay.</p>
 
       <div className="flex flex-col gap-5">
         {rooms.map((room) => (
@@ -294,7 +294,7 @@ function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormDa
             whileHover={{ y: -2 }}
             onClick={() => set("room", room.id)}
             className={`flex gap-0 border-2 overflow-hidden cursor-pointer transition-all duration-400 ${
-              form.room === room.id ? "border-[#2F4F3E] shadow-xl" : "border-[#6B4F3A]/15 hover:border-[#6B4F3A]/40"
+              form.room === room.id ? "border-[#2F4F3E] shadow-xl" : "border-[#8B5A3C]/15 hover:border-[#8B5A3C]/40"
             }`}
           >
             {/* Image */}
@@ -316,19 +316,19 @@ function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormDa
                   <h3 className="text-base font-bold text-[#2C2C2C] mt-0.5" style={{ fontFamily: "'Playfair Display', serif" }}>
                     {room.name}
                   </h3>
-                  <p className="text-xs text-[#6B4F3A]/60 mt-0.5">{room.guests}</p>
+                  <p className="text-xs text-[#8B5A3C]/60 mt-0.5">{room.guests}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
                   <p className="text-lg font-bold text-[#2F4F3E]" style={{ fontFamily: "'Playfair Display', serif" }}>
                     ₹{room.price.toLocaleString()}
                   </p>
-                  <p className="text-[0.58rem] text-[#6B4F3A]/50">per night</p>
+                  <p className="text-[0.58rem] text-[#8B5A3C]/50">per night</p>
                 </div>
               </div>
-              <p className="text-xs text-[#6B4F3A]/60 leading-relaxed mb-3 hidden sm:block">{room.desc}</p>
+              <p className="text-xs text-[#8B5A3C]/60 leading-relaxed mb-3 hidden sm:block">{room.desc}</p>
               <div className="flex flex-wrap gap-2">
                 {room.features.map((f) => (
-                  <span key={f} className="px-2 py-0.5 bg-[#F5F1E8] text-[0.58rem] tracking-wide text-[#6B4F3A]">{f}</span>
+                  <span key={f} className="px-2 py-0.5 bg-[#F5F1E8] text-[0.58rem] tracking-wide text-[#8B5A3C]">{f}</span>
                 ))}
               </div>
             </div>
@@ -346,7 +346,7 @@ function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v
       <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
         Tell Us About You
       </h2>
-      <p className="text-sm text-[#6B4F3A]/60 mb-8">Your details are kept private and secure.</p>
+      <p className="text-sm text-[#8B5A3C]/60 mb-8">Your details are kept private and secure.</p>
 
       <div className="grid sm:grid-cols-2 gap-7 mb-7">
         {[
@@ -355,7 +355,7 @@ function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v
           { label: "Email Address", key: "email" as const, type: "email", placeholder: "you@example.com" },
         ].map(({ label, key, type, placeholder }) => (
           <div key={key} className={`flex flex-col gap-2 ${key === "email" ? "sm:col-span-2" : ""}`}>
-            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#6B4F3A] font-medium">
+            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-medium">
               {label}
             </label>
             <input
@@ -372,7 +372,7 @@ function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v
 
       {/* Special requests */}
       <div className="flex flex-col gap-2">
-        <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#6B4F3A] font-medium flex items-center gap-1.5">
+        <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-medium flex items-center gap-1.5">
           <MessageSquare size={11} /> Special Requests (optional)
         </label>
         <textarea
@@ -407,7 +407,7 @@ function StepConfirm({ form, room, nights, subtotal, tax, total }: {
       <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
         Review Your Reservation
       </h2>
-      <p className="text-sm text-[#6B4F3A]/60 mb-8">Please review your details before confirming.</p>
+      <p className="text-sm text-[#8B5A3C]/60 mb-8">Please review your details before confirming.</p>
 
       <div className="flex flex-col gap-5">
         {/* Stay Details */}
@@ -422,15 +422,15 @@ function StepConfirm({ form, room, nights, subtotal, tax, total }: {
           { label: "Email", value: form.email || "—" },
           ...(form.requests ? [{ label: "Special Requests", value: form.requests }] : []),
         ].map(({ label, value }) => (
-          <div key={label} className="flex gap-4 py-3 border-b border-[#6B4F3A]/10 last:border-0">
-            <span className="w-36 flex-shrink-0 text-xs font-medium text-[#6B4F3A]/60 uppercase tracking-wide">{label}</span>
+          <div key={label} className="flex gap-4 py-3 border-b border-[#8B5A3C]/10 last:border-0">
+            <span className="w-36 flex-shrink-0 text-xs font-medium text-[#8B5A3C]/60 uppercase tracking-wide">{label}</span>
             <span className="text-sm text-[#2C2C2C] leading-relaxed">{value}</span>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 p-4 bg-[#F5F1E8] border border-[#6B4F3A]/15">
-        <p className="text-[0.65rem] text-[#6B4F3A]/60 leading-5">
+      <div className="mt-6 p-4 bg-[#F5F1E8] border border-[#8B5A3C]/15">
+        <p className="text-[0.65rem] text-[#8B5A3C]/60 leading-5">
           By confirming, you agree to Hakki Goodu&apos;s cancellation policy. Full payment details and confirmation will be sent to your email within 24 hours. No payment is processed at this step.
         </p>
       </div>
@@ -446,7 +446,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
   const fmt = (d: string) => d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "—";
 
   return (
-    <div className="bg-white border border-[#6B4F3A]/15 overflow-hidden">
+    <div className="bg-white border border-[#8B5A3C]/15 overflow-hidden">
       {/* Thumb */}
       <div className="relative h-44 overflow-hidden">
         <Image
@@ -458,7 +458,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1e3329]/80 to-transparent" />
         <div className="absolute bottom-4 left-4 right-4">
-          <p className="text-[0.58rem] tracking-[0.3em] text-[#C9A96E] uppercase mb-0.5">
+          <p className="text-[0.58rem] tracking-[0.3em] text-[#B98958] uppercase mb-0.5">
             {room?.tier || "Your Stay"}
           </p>
           <p className="text-base font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -470,17 +470,17 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
       <div className="p-6">
         {/* Dates */}
         {form.checkin && form.checkout && (
-          <div className="flex items-center justify-between mb-5 pb-5 border-b border-[#6B4F3A]/10">
+          <div className="flex items-center justify-between mb-5 pb-5 border-b border-[#8B5A3C]/10">
             <div className="text-center">
-              <p className="text-[0.55rem] tracking-widest uppercase text-[#6B4F3A]/50 mb-1">Check-In</p>
+              <p className="text-[0.55rem] tracking-widest uppercase text-[#8B5A3C]/50 mb-1">Check-In</p>
               <p className="text-sm font-semibold text-[#2C2C2C]">{fmt(form.checkin)}</p>
             </div>
             <div className="flex flex-col items-center gap-1">
-              <div className="w-8 h-px bg-[#C9A96E]" />
-              <p className="text-[0.58rem] text-[#6B4F3A]/50">{nights}N</p>
+              <div className="w-8 h-px bg-[#B98958]" />
+              <p className="text-[0.58rem] text-[#8B5A3C]/50">{nights}N</p>
             </div>
             <div className="text-center">
-              <p className="text-[0.55rem] tracking-widest uppercase text-[#6B4F3A]/50 mb-1">Check-Out</p>
+              <p className="text-[0.55rem] tracking-widest uppercase text-[#8B5A3C]/50 mb-1">Check-Out</p>
               <p className="text-sm font-semibold text-[#2C2C2C]">{fmt(form.checkout)}</p>
             </div>
           </div>
@@ -488,7 +488,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
 
         {/* Guests */}
         {form.adults > 0 && (
-          <div className="flex items-center gap-2 mb-5 text-xs text-[#6B4F3A]/60">
+          <div className="flex items-center gap-2 mb-5 text-xs text-[#8B5A3C]/60">
             <Users size={13} />
             {form.adults} adult{form.adults !== 1 ? "s" : ""}{form.children > 0 ? `, ${form.children} child${form.children !== 1 ? "ren" : ""}` : ""}
           </div>
@@ -496,16 +496,16 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
 
         {/* Price breakdown */}
         {room && nights > 0 && (
-          <div className="flex flex-col gap-3 pt-4 border-t border-[#6B4F3A]/10">
-            <div className="flex justify-between text-xs text-[#6B4F3A]/70">
+          <div className="flex flex-col gap-3 pt-4 border-t border-[#8B5A3C]/10">
+            <div className="flex justify-between text-xs text-[#8B5A3C]/70">
               <span>₹{room.price.toLocaleString()} × {nights} night{nights !== 1 ? "s" : ""}</span>
               <span>₹{subtotal.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-xs text-[#6B4F3A]/70">
+            <div className="flex justify-between text-xs text-[#8B5A3C]/70">
               <span>GST (12%)</span>
               <span>₹{tax.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-sm font-semibold text-[#2C2C2C] pt-3 border-t border-[#6B4F3A]/10">
+            <div className="flex justify-between text-sm font-semibold text-[#2C2C2C] pt-3 border-t border-[#8B5A3C]/10">
               <span>Total</span>
               <span className="text-[#2F4F3E]" style={{ fontFamily: "'Playfair Display', serif" }}>
                 ₹{total.toLocaleString()}
@@ -515,8 +515,8 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
         )}
 
         {/* Inclusions */}
-        <div className="mt-6 pt-5 border-t border-[#6B4F3A]/10">
-          <p className="text-[0.58rem] tracking-[0.3em] uppercase text-[#6B4F3A]/50 mb-3">All Stays Include</p>
+        <div className="mt-6 pt-5 border-t border-[#8B5A3C]/10">
+          <p className="text-[0.58rem] tracking-[0.3em] uppercase text-[#8B5A3C]/50 mb-3">All Stays Include</p>
           <div className="flex flex-col gap-2">
             {(
               [
@@ -526,7 +526,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
                 { icon: Star,   text: "Bonfire & stargazing" },
               ] as { icon: React.ElementType; text: string }[]
             ).map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 text-xs text-[#6B4F3A]/65">
+              <div key={text} className="flex items-center gap-2 text-xs text-[#8B5A3C]/65">
                 <Icon size={11} className="text-[#2F4F3E] flex-shrink-0" />
                 <span>{text}</span>
               </div>
@@ -549,7 +549,7 @@ function ConfirmationScreen({ form, room, nights, total }: {
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" as const }}
-        className="bg-white border border-[#6B4F3A]/15 max-w-lg w-full p-10 text-center shadow-2xl"
+        className="bg-white border border-[#8B5A3C]/15 max-w-lg w-full p-10 text-center shadow-2xl"
       >
         {/* Check circle */}
         <motion.div
@@ -564,18 +564,18 @@ function ConfirmationScreen({ form, room, nights, total }: {
         <h2 className="text-3xl font-bold text-[#2C2C2C] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
           Request Received!
         </h2>
-        <p className="text-sm text-[#6B4F3A]/65 leading-relaxed mb-8">
+        <p className="text-sm text-[#8B5A3C]/65 leading-relaxed mb-8">
           Thank you, <strong>{form.name}</strong>. Your reservation request for{" "}
           <strong>{room.name}</strong> has been received. Our team will contact you at{" "}
           <strong>{form.email}</strong> within 24 hours to confirm your stay.
         </p>
 
         <div className="bg-[#F5F1E8] p-5 mb-8">
-          <p className="text-[0.6rem] tracking-[0.3em] uppercase text-[#6B4F3A]/60 mb-3">Reservation Reference</p>
+          <p className="text-[0.6rem] tracking-[0.3em] uppercase text-[#8B5A3C]/60 mb-3">Reservation Reference</p>
           <p className="text-xl font-bold text-[#2F4F3E] tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
             {ref}
           </p>
-          <p className="text-xs text-[#6B4F3A]/50 mt-2">{nights} nights · ₹{total.toLocaleString()} total</p>
+          <p className="text-xs text-[#8B5A3C]/50 mt-2">{nights} nights · ₹{total.toLocaleString()} total</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -589,7 +589,7 @@ function ConfirmationScreen({ form, room, nights, total }: {
             href="https://wa.me/919876543210"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-3 bg-[#2F4F3E] text-white text-xs tracking-[0.2em] uppercase font-medium hover:bg-[#6B4F3A] transition-all duration-400"
+            className="px-8 py-3 bg-[#8B5A3C] text-white text-xs tracking-[0.2em] uppercase font-medium hover:bg-[#A9724F] transition-all duration-400"
           >
             WhatsApp Us
           </a>

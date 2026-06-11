@@ -72,7 +72,7 @@ export default function StorySection() {
             >
               <p className="text-[0.58rem] tracking-[0.35em] uppercase text-white/55 mb-1">Est.</p>
               <p
-                className="text-3xl font-bold leading-none text-[#C9A96E]"
+                className="text-3xl font-bold leading-none text-[#B98958]"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 2018
@@ -98,7 +98,7 @@ export default function StorySection() {
               <em className="italic text-[#2F4F3E]">Woven Into the Forest.</em>
             </h2>
 
-            <div className="w-10 h-0.5 bg-[#C9A96E]" />
+            <div className="w-10 h-0.5 bg-[#8B5A3C]" />
 
             <p className="text-sm text-[#2C2C2C]/65 leading-7">
               Hakki Goodu was born from a quiet longing — to find a place where the forest doesn&apos;t end at the door. Where every structure breathes, every corner feels handmade, and every morning begins with birdsong instead of alarms.
@@ -108,7 +108,7 @@ export default function StorySection() {
             </p>
 
             {/* Pull quote */}
-            <div className="border-l-2 border-[#B56A4A] pl-6 py-1">
+            <div className="border-l-2 border-[#8B5A3C] pl-6 py-1">
               <p
                 className="text-lg font-semibold italic text-[#2F4F3E] leading-relaxed"
                 style={{ fontFamily: "'Playfair Display', serif" }}
@@ -116,7 +116,7 @@ export default function StorySection() {
                 "We didn&apos;t build a resort in the forest.
                 We wove a resting place within it."
               </p>
-              <p className="mt-2 text-xs text-[#6B4F3A]/70 tracking-wide">
+              <p className="mt-2 text-xs text-[#8B5A3C]/70 tracking-wide">
                 — Founders, Hakki Goodu
               </p>
             </div>
@@ -130,7 +130,7 @@ export default function StorySection() {
                 { label: "Nature First", sub: "50+ bird species" },
               ].map((v) => (
                 <div key={v.label} className="flex items-start gap-2.5">
-                  <div className="w-1 h-1 bg-[#B56A4A] rounded-full mt-1.5 flex-shrink-0" />
+                  <div className="w-1.5 h-1.5 bg-[#8B5A3C] rounded-full mt-1.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs font-semibold text-[#2C2C2C] tracking-wide">{v.label}</p>
                     <p className="text-xs text-[#2C2C2C]/45">{v.sub}</p>

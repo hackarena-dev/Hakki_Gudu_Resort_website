@@ -46,7 +46,7 @@ function Stars({ count }: { count: number }) {
   return (
     <div className="flex gap-1">
       {Array.from({ length: count }).map((_, i) => (
-        <svg key={i} viewBox="0 0 10 10" className="w-3 h-3 fill-[#C9A96E]">
+        <svg key={i} viewBox="0 0 10 10" className="w-3 h-3 fill-[#B98958]">
           <path d="M5 0L6.12 3.45H9.76L6.82 5.59L7.94 9.04L5 6.9L2.06 9.04L3.18 5.59L0.24 3.45H3.88L5 0Z"/>
         </svg>
       ))}
@@ -94,12 +94,12 @@ export default function ReviewsSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" as const }}
-            className="text-center"
+            className="text-center bg-white/45 backdrop-blur-sm border border-[#8B5A3C]/10 p-8 md:p-12 shadow-sm rounded-sm"
           >
             {/* Quote icon */}
             <div className="flex justify-center mb-6">
-              <div className="w-14 h-14 border border-[#C9A96E]/40 flex items-center justify-center">
-                <Quote size={20} className="text-[#C9A96E]" />
+              <div className="w-14 h-14 border border-[#8B5A3C]/40 flex items-center justify-center">
+                <Quote size={20} className="text-[#8B5A3C]" />
               </div>
             </div>
 
@@ -121,7 +121,7 @@ export default function ReviewsSection() {
               <p className="text-sm font-semibold text-[#2C2C2C] tracking-wide">
                 {REVIEWS[active].name}
               </p>
-              <div className="flex items-center gap-2 text-xs text-[#6B4F3A]/65">
+              <div className="flex items-center gap-2 text-xs text-[#8B5A3C]/65">
                 <span>{REVIEWS[active].location}</span>
                 <span className="w-1 h-1 rounded-full bg-current opacity-40" />
                 <span>{REVIEWS[active].stay}</span>
@@ -133,7 +133,7 @@ export default function ReviewsSection() {
           <div className="flex items-center justify-center gap-6 mt-12">
             <button
               onClick={prev}
-              className="w-10 h-10 border border-[#6B4F3A]/25 flex items-center justify-center text-[#6B4F3A] hover:bg-[#2F4F3E] hover:text-white hover:border-[#2F4F3E] transition-all duration-300"
+              className="w-10 h-10 border border-[#8B5A3C]/25 flex items-center justify-center text-[#8B5A3C] hover:bg-[#2F4F3E] hover:text-white hover:border-[#2F4F3E] transition-all duration-300"
               aria-label="Previous review"
             >
               <ChevronLeft size={16} />
@@ -146,7 +146,7 @@ export default function ReviewsSection() {
                   key={i}
                   onClick={() => setActive(i)}
                   className={`transition-all duration-400 ${
-                    i === active ? "w-7 h-1.5 bg-[#2F4F3E]" : "w-1.5 h-1.5 bg-[#6B4F3A]/25 hover:bg-[#6B4F3A]/50"
+                    i === active ? "w-7 h-1.5 bg-[#2F4F3E]" : "w-1.5 h-1.5 bg-[#8B5A3C]/25 hover:bg-[#8B5A3C]/50"
                   }`}
                   aria-label={`Review ${i + 1}`}
                 />
@@ -155,7 +155,7 @@ export default function ReviewsSection() {
 
             <button
               onClick={next}
-              className="w-10 h-10 border border-[#6B4F3A]/25 flex items-center justify-center text-[#6B4F3A] hover:bg-[#2F4F3E] hover:text-white hover:border-[#2F4F3E] transition-all duration-300"
+              className="w-10 h-10 border border-[#8B5A3C]/25 flex items-center justify-center text-[#8B5A3C] hover:bg-[#2F4F3E] hover:text-white hover:border-[#2F4F3E] transition-all duration-300"
               aria-label="Next review"
             >
               <ChevronRight size={16} />
@@ -168,7 +168,7 @@ export default function ReviewsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.4, duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-20 lg:mt-28 pt-12 border-t border-[#6B4F3A]/12"
+          className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-20 lg:mt-28 pt-12 border-t border-[#8B5A3C]/12"
         >
           {[
             { title: "Best Eco Resort", sub: "India Travel Awards 2024" },
@@ -176,15 +176,15 @@ export default function ReviewsSection() {
             { title: "Top 10 Retreats", sub: "Condé Nast Traveller" },
             { title: "Eco Certified", sub: "Green Hospitality 2024" },
           ].map((a) => (
-            <div key={a.title} className="text-center py-6 px-4 border border-[#6B4F3A]/10 hover:border-[#2F4F3E]/30 transition-colors duration-400 bg-white/50">
+            <div key={a.title} className="text-center py-6 px-4 border border-[#8B5A3C]/10 hover:border-[#2F4F3E]/30 transition-colors duration-400 bg-white/50">
               <p
                 className="text-lg font-bold text-[#2C2C2C] mb-2"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {a.title}
               </p>
-              <div className="w-5 h-px bg-[#C9A96E] mx-auto mb-2" />
-              <p className="text-[0.62rem] tracking-[0.25em] uppercase text-[#6B4F3A]/60">
+              <div className="w-5 h-px bg-[#8B5A3C] mx-auto mb-2" />
+              <p className="text-[0.62rem] tracking-[0.25em] uppercase text-[#8B5A3C]/60">
                 {a.sub}
               </p>
             </div>

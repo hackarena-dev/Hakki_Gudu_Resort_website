@@ -41,7 +41,7 @@ const FAQS = [
 
 function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boolean; onToggle: () => void }) {
   return (
-    <div className="border-b border-[#6B4F3A]/12 last:border-0">
+    <div className="border-b border-[#8B5A3C]/12 last:border-0">
       <button
         onClick={onToggle}
         className="w-full flex items-start justify-between gap-6 py-6 text-left group"
@@ -53,7 +53,7 @@ function FAQItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
         >
           {q}
         </span>
-        <span className="flex-shrink-0 w-8 h-8 border border-[#6B4F3A]/25 flex items-center justify-center text-[#6B4F3A] group-hover:bg-[#2F4F3E] group-hover:text-white group-hover:border-[#2F4F3E] transition-all duration-300">
+        <span className="flex-shrink-0 w-8 h-8 border border-[#8B5A3C]/25 flex items-center justify-center text-[#8B5A3C] group-hover:bg-[#8B5A3C] group-hover:text-white group-hover:border-[#8B5A3C] transition-all duration-300">
           {isOpen ? <Minus size={14} /> : <Plus size={14} />}
         </span>
       </button>
@@ -109,7 +109,7 @@ export default function FAQSection() {
               href="https://wa.me/919876543210"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 text-xs tracking-[0.2em] uppercase font-medium text-[#2F4F3E] hover:text-[#B56A4A] transition-colors duration-300 group"
+              className="inline-flex items-center gap-2.5 text-xs tracking-[0.2em] uppercase font-medium text-[#2F4F3E] hover:text-[#8B5A3C] transition-colors duration-300 group"
             >
               Ask Us Directly
               <span className="w-8 h-px bg-current group-hover:w-12 transition-all duration-400" />

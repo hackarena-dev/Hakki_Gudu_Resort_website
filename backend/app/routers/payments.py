@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, BackgroundTasks
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timezone
@@ -24,10 +25,11 @@ async def create_order(request: CreateOrderRequest, session: AsyncSession = Depe
         raise HTTPException(status_code=400, detail="Reservation not found or not pending")
 
     try:
-        # Call Razorpay
-        order = razorpay_service.create_order(
-            amount_paise=res.amount_paise,
-            receipt=str(res.id)
+        # Call Razorpay (Runs synchronous SDK in threadpool to prevent blocking)
+        order = await run_in_threadpool(
+            razorpay_service.create_order,
+            res.amount_paise,
+            str(res.id)
         )
         
         # Store razorpay_order_id

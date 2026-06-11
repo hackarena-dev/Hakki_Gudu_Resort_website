@@ -14,7 +14,7 @@ from app.routers.bookings import format_inr
 router = APIRouter(prefix="/admin")
 
 @router.post("/login", response_model=AdminLoginResponse)
-async def login(request: AdminLoginRequest):
+def login(request: AdminLoginRequest):
     hashed_admin_pass = hash_password(settings.ADMIN_PASSWORD)
     
     if request.username != settings.ADMIN_USERNAME:

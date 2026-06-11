@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, BackgroundTasks
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, text, and_
 from datetime import datetime, timezone
 import hmac
 import hashlib
@@ -24,10 +25,11 @@ async def create_order(request: CreateOrderRequest, session: AsyncSession = Depe
         raise HTTPException(status_code=400, detail="Reservation not found or not pending")
 
     try:
-        # Call Razorpay
-        order = razorpay_service.create_order(
-            amount_paise=res.amount_paise,
-            receipt=str(res.id)
+        # Call Razorpay (Runs synchronous SDK in threadpool to prevent blocking)
+        order = await run_in_threadpool(
+            razorpay_service.create_order,
+            res.amount_paise,
+            str(res.id)
         )
         
         # Store razorpay_order_id
@@ -45,7 +47,7 @@ async def create_order(request: CreateOrderRequest, session: AsyncSession = Depe
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/verify-payment")
-async def verify_payment(request: Request, session: AsyncSession = Depends(get_session)):
+async def verify_payment(request: Request, background_tasks: BackgroundTasks, session: AsyncSession = Depends(get_session)):
     body = await request.body()
     try:
         data = json.loads(body)
@@ -92,7 +94,7 @@ async def verify_payment(request: Request, session: AsyncSession = Depends(get_s
             hashlib.sha256
         ).hexdigest()
 
-    if not hmac.compare_digest(expected_signature, razorpay_signature):
+    if not razorpay_signature or not hmac.compare_digest(expected_signature, razorpay_signature):
         return Response(status_code=400, content="Signature mismatch")
 
     # If frontend callback, we assume it's captured
@@ -100,11 +102,26 @@ async def verify_payment(request: Request, session: AsyncSession = Depends(get_s
         event = "payment.captured"
 
     if event == "payment.captured":
+        await session.execute(text("SELECT pg_advisory_xact_lock(1001)"))
         stmt = select(Reservation).where(Reservation.razorpay_order_id == razorpay_order_id)
         result = await session.execute(stmt)
         res = result.scalars().first()
         
         if res and res.status != "confirmed":
+            if res.status == "expired":
+                from app.routers.bookings import get_overlap_condition
+                overlap_stmt = select(Reservation).where(
+                    and_(
+                        Reservation.id != res.id,
+                        get_overlap_condition(res.check_in, res.check_out)
+                    )
+                )
+                overlap_result = await session.execute(overlap_stmt)
+                if overlap_result.scalars().first():
+                    res.status = "failed"
+                    await session.commit()
+                    return Response(status_code=200, content="OK - Refund needed")
+                    
             res.status = "confirmed"
             res.confirmed_at = datetime.now(timezone.utc)
             res.razorpay_payment_id = razorpay_payment_id
@@ -114,19 +131,20 @@ async def verify_payment(request: Request, session: AsyncSession = Depends(get_s
             from app.services.whatsapp_service import send_booking_confirmation
             from app.services.email_service import send_invoice_email
             try:
-                import asyncio
-                asyncio.create_task(send_booking_confirmation(
+                background_tasks.add_task(
+                    send_booking_confirmation,
                     phone=res.guest_phone,
                     name=res.guest_name,
                     dates=f"{res.check_in} to {res.check_out}",
                     booking_ref=res.booking_ref,
                     amount=res.amount_paise
-                ))
+                )
             except Exception:
                 pass
                 
             try:
-                send_invoice_email(
+                background_tasks.add_task(
+                    send_invoice_email,
                     to=res.guest_email,
                     name=res.guest_name,
                     booking_details={

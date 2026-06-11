@@ -82,64 +82,80 @@ export default function ExperienceSection() {
             The Experiences That{" "}
             <em className="italic text-[#C9A96E]">Stay With You</em>
           </h2>
-          <p className="mt-5 text-sm text-white/50 max-w-lg mx-auto leading-relaxed">
+          <p className="mt-5 text-sm text-[#FAF7F2]/75 max-w-lg mx-auto leading-relaxed">
             Every experience at Hakki Goodu is curated to create a genuine connection with the land, the people, and yourself.
           </p>
         </motion.div>
 
         {/* Experience Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {EXPERIENCES.map((exp, i) => (
-            <motion.div
-              key={exp.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.08, duration: 0.9, ease: "easeOut" }}
-              className="group relative overflow-hidden h-[380px] sm:h-[420px] lg:h-[450px] shadow-lg cursor-pointer bg-[#1e3329]"
-            >
-              {/* Image Container with Zoom hover */}
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={exp.image}
-                  alt={exp.title}
-                  fill
-                  className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-              </div>
+          {EXPERIENCES.map((exp, i) => {
+            const isWide = i === 1 || i === 2 || i === 5;
+            const isReversed = i === 2; // wide card with text on left, image on right on desktop
 
-              {/* Dynamic Overlays */}
-              {/* Solid gradient overlay for text readability */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/5 z-10 transition-all duration-500 group-hover:from-black/95 group-hover:via-black/50" />
-              {/* Soft forest green glow overlay on hover */}
-              <div className="absolute inset-0 bg-[#2F4F3E]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
-
-              {/* Tag Badge */}
-              <div
-                className="absolute top-5 left-5 z-20 px-3 py-1.5 text-[0.55rem] tracking-[0.3em] uppercase font-bold text-white"
-                style={{ background: exp.tagColor }}
+            return (
+              <motion.div
+                key={exp.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.08, duration: 0.9, ease: "easeOut" }}
+                className={`group relative overflow-hidden flex flex-col shadow-lg bg-[#1e3329]/40 border border-white/10 rounded-none transition-all duration-500 hover:border-[#C9A96E]/40 hover:shadow-2xl hover:bg-[#1e3329]/60 ${
+                  isWide
+                    ? "lg:col-span-2 lg:flex-row h-[420px] sm:h-[460px] lg:h-[400px]"
+                    : "col-span-1 h-[420px] sm:h-[460px] lg:h-[400px]"
+                } ${isWide && isReversed ? "lg:flex-row-reverse" : ""}`}
               >
-                {exp.tag}
-              </div>
-
-              {/* Content Panel */}
-              <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 z-20 flex flex-col justify-end">
-                <h3
-                  className="text-xl md:text-2xl font-bold text-white mb-3 tracking-wide transition-colors duration-300 group-hover:text-[#C9A96E]"
-                  style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                {/* Image Container with Zoom hover */}
+                <div
+                  className={`relative overflow-hidden flex-shrink-0 ${
+                    isWide
+                      ? "w-full h-[220px] sm:h-[240px] lg:w-1/2 lg:h-full"
+                      : "w-full h-[220px] sm:h-[240px]"
+                  }`}
                 >
-                  {exp.title}
-                </h3>
-                
-                {/* Description: Slides up on desktop, static on mobile for accessibility */}
-                <div className="overflow-hidden">
-                  <p className="text-xs md:text-[0.82rem] leading-relaxed text-white/75 lg:opacity-0 lg:translate-y-8 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-all duration-500 ease-out">
+                  <Image
+                    src={exp.image}
+                    alt={exp.title}
+                    fill
+                    className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110"
+                    sizes={isWide ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
+                  />
+                  {/* Soft green wash overlay on image on hover */}
+                  <div className="absolute inset-0 bg-[#2F4F3E]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Tag Badge */}
+                  <div
+                    className="absolute top-5 left-5 z-20 px-3 py-1.5 text-[0.55rem] tracking-[0.3em] uppercase font-bold text-white shadow-md"
+                    style={{ background: exp.tagColor }}
+                  >
+                    {exp.tag}
+                  </div>
+                </div>
+
+                {/* Content Panel */}
+                <div
+                  className={`p-6 sm:p-8 flex flex-col justify-center flex-grow ${
+                    isWide ? "lg:w-1/2" : "w-full"
+                  }`}
+                >
+                  <h3
+                    className="text-xl md:text-2xl font-bold text-white mb-3 tracking-wide transition-colors duration-300 group-hover:text-[#C9A96E]"
+                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                  >
+                    {exp.title}
+                  </h3>
+
+                  {/* Elegant divider line that expands on hover */}
+                  <div className="w-12 h-0.5 bg-[#C9A96E]/40 mb-4 transition-all duration-500 group-hover:w-20 group-hover:bg-[#C9A96E]" />
+
+                  {/* Description: Always visible and readable */}
+                  <p className="text-xs sm:text-sm leading-relaxed text-[#FAF7F2]/80 transition-colors duration-300 group-hover:text-white">
                     {exp.desc}
                   </p>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

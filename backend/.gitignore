@@ -1,1 +1,8 @@
 .env
+02_execution_plan.docx
+03_ai_assistant_prompt.docx
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/

@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
 
 class Settings(BaseSettings):
     DATABASE_URL: str
@@ -11,6 +12,13 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str
     RESORT_PRICE_PER_NIGHT_PAISE: int
     FRONTEND_URL: str
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def assemble_db_connection(cls, v: str) -> str:
+        if v and v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return v
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

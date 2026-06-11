@@ -91,10 +91,10 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25 + i * 0.08, duration: 0.6 }}
                   onClick={() => scrollTo(link.href)}
-                  className="relative text-[0.7rem] tracking-[0.25em] uppercase font-semibold text-[#FAF7F2]/80 hover:text-[#8B5A3C] transition-colors duration-300 pb-1.5 group"
+                  className="relative text-[0.7rem] tracking-[0.25em] uppercase font-semibold text-[#FAF7F2]/80 hover:text-[#B98958] transition-colors duration-300 pb-1.5 group"
                 >
                   {link.label}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-[#8B5A3C] group-hover:w-full transition-all duration-400 ease-out" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1.5px] bg-[#B98958] group-hover:w-full transition-all duration-400 ease-out" />
                 </motion.button>
               ))}
               <motion.div
@@ -156,7 +156,7 @@ export default function Navbar() {
                   exit={{ opacity: 0, y: 30 }}
                   transition={{ delay: i * 0.08, ease: "easeOut" }}
                   onClick={() => scrollTo(link.href)}
-                  className="text-3xl md:text-4xl font-medium tracking-wide text-white hover:text-[#8B5A3C] transition-colors"
+                  className="text-3xl md:text-4xl font-medium tracking-wide text-white hover:text-[#B98958] transition-colors"
                   style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
                 >
                   {link.label}

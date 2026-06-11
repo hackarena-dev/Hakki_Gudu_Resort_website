@@ -26,7 +26,7 @@ export default function StorySection() {
           Our Story
         </motion.p>
 
-        <div className="grid lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-20 items-center">
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-20 items-center">
           {/* Image Block */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -35,13 +35,13 @@ export default function StorySection() {
             className="relative"
           >
             {/* Main image */}
-            <div className="relative aspect-[3/4] overflow-hidden">
+            <div className="relative aspect-[4/5] overflow-hidden">
               <Image
                 src="/about.png"
                 alt="Hakki Goodu resort interior — handcrafted teak wood and natural materials"
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 55vw"
+                sizes="(max-width: 1024px) 100vw, 40vw"
               />
               {/* Overlay tint */}
               <div className="absolute inset-0 bg-[#2F4F3E]/10" />

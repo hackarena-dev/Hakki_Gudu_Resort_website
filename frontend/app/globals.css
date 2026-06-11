@@ -73,13 +73,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ─── UTILITY CLASSES ────────────────────────────────────── */
 .container-luxury {
-  max-width: 100%;
+  max-width: 1440px;
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 5vw, 0rem);
+  padding-inline: clamp(1.5rem, 7vw, 0rem);
 }
 
 .section-pad {
-  padding-block: clamp(4rem, 8vw, 8rem);
+  padding-block: clamp(5rem, 9vw, 1rem);
 }
 
 .section-label {

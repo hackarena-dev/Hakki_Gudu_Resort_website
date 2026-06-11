@@ -87,73 +87,83 @@ export default function ExperienceSection() {
           </p>
         </motion.div>
 
-        {/* Experience Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Experience Alternating Showcase */}
+        <div className="flex flex-col gap-0 mt-10 lg:mt-16">
           {EXPERIENCES.map((exp, i) => {
-            const isWide = i === 1 || i === 2 || i === 5;
-            const isReversed = i === 2; // wide card with text on left, image on right on desktop
+            const isReversed = i % 2 === 1; // Alternate: Image Left / Image Right
 
             return (
-              <motion.div
+              <div
                 key={exp.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: i * 0.08, duration: 0.9, ease: "easeOut" }}
-                className={`group relative overflow-hidden flex flex-col shadow-lg bg-[#1e3329]/40 border border-white/10 rounded-none transition-all duration-500 hover:border-[#C9A96E]/40 hover:shadow-2xl hover:bg-[#1e3329]/60 ${
-                  isWide
-                    ? "lg:col-span-2 lg:flex-row h-[420px] sm:h-[460px] lg:h-[400px]"
-                    : "col-span-1 h-[420px] sm:h-[460px] lg:h-[400px]"
-                } ${isWide && isReversed ? "lg:flex-row-reverse" : ""}`}
+                className="border-b border-white/10 last:border-0 py-12 lg:py-20"
               >
-                {/* Image Container with Zoom hover */}
-                <div
-                  className={`relative overflow-hidden flex-shrink-0 ${
-                    isWide
-                      ? "w-full h-[220px] sm:h-[240px] lg:w-1/2 lg:h-full"
-                      : "w-full h-[220px] sm:h-[240px]"
-                  }`}
-                >
-                  <Image
-                    src={exp.image}
-                    alt={exp.title}
-                    fill
-                    className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-110"
-                    sizes={isWide ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"}
-                  />
-                  {/* Soft green wash overlay on image on hover */}
-                  <div className="absolute inset-0 bg-[#2F4F3E]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
-                  {/* Tag Badge */}
-                  <div
-                    className="absolute top-5 left-5 z-20 px-3 py-1.5 text-[0.55rem] tracking-[0.3em] uppercase font-bold text-white shadow-md"
-                    style={{ background: exp.tagColor }}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+                  {/* Image Container */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.9, ease: "easeOut" }}
+                    className={`group relative overflow-hidden aspect-[3/2] w-full max-w-[540px] mx-auto shadow-2xl border border-white/5 ${
+                      isReversed ? "lg:order-2" : ""
+                    }`}
                   >
-                    {exp.tag}
-                  </div>
-                </div>
+                    <Image
+                      src={exp.image}
+                      alt={exp.title}
+                      fill
+                      className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 45vw"
+                    />
+                    {/* Soft tint overlay */}
+                    <div className="absolute inset-0 bg-black/15 group-hover:bg-black/5 transition-colors duration-500" />
+                    
+                    {/* Tag Badge */}
+                    <div
+                      className="absolute top-5 left-5 z-20 px-3 py-1.5 text-[0.55rem] tracking-[0.3em] uppercase font-bold text-white shadow-lg"
+                      style={{ background: exp.tagColor }}
+                    >
+                      {exp.tag}
+                    </div>
+                  </motion.div>
 
-                {/* Content Panel */}
-                <div
-                  className={`p-6 sm:p-8 flex flex-col justify-center flex-grow ${
-                    isWide ? "lg:w-1/2" : "w-full"
-                  }`}
-                >
-                  <h3
-                    className="text-xl md:text-2xl font-bold text-white mb-3 tracking-wide transition-colors duration-300 group-hover:text-[#C9A96E]"
-                    style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                  {/* Text Container */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-80px" }}
+                    transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+                    className="flex flex-col items-start text-left max-w-[500px] mx-auto lg:mx-0 lg:max-w-none"
                   >
-                    {exp.title}
-                  </h3>
+                    <span
+                      className="text-[0.6rem] tracking-[0.35em] uppercase font-semibold mb-3"
+                      style={{ color: exp.tagColor }}
+                    >
+                      {exp.tag} Experience
+                    </span>
+                    <h3
+                      className="text-2xl md:text-3.5xl font-bold text-white mb-4 tracking-wide transition-colors duration-300 hover:text-[#C9A96E]"
+                      style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                    >
+                      {exp.title}
+                    </h3>
+                    
+                    <div className="w-12 h-[1px] bg-[#C9A96E]/50 mb-5" />
 
-                  {/* Elegant divider line that expands on hover */}
-                  <div className="w-12 h-0.5 bg-[#C9A96E]/40 mb-4 transition-all duration-500 group-hover:w-20 group-hover:bg-[#C9A96E]" />
-
-                  {/* Description: Always visible and readable */}
-                  <p className="text-xs sm:text-sm leading-relaxed text-[#FAF7F2]/80 transition-colors duration-300 group-hover:text-white">
-                    {exp.desc}
-                  </p>
+                    <p className="text-sm leading-relaxed text-[#FAF7F2]/80 mb-6">
+                      {exp.desc}
+                    </p>
+                    
+                    <a
+                      href="#booking"
+                      className="group/link inline-flex items-center gap-2 text-[0.65rem] uppercase tracking-[0.25em] font-semibold text-[#C9A96E] hover:text-white transition-colors duration-300"
+                    >
+                      Inquire Experience
+                      <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
+                    </a>
+                  </motion.div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

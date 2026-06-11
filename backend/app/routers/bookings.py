@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_, func
+from sqlalchemy import select, or_, and_, func, text
 from datetime import datetime, timezone, timedelta, date
 import uuid
 from typing import List, Dict, Any
@@ -88,6 +88,7 @@ async def create_hold(request: HoldRequest, session: AsyncSession = Depends(get_
     amount_paise = nights * settings.RESORT_PRICE_PER_NIGHT_PAISE
 
     try:
+        await session.execute(text("SELECT pg_advisory_xact_lock(1001)"))
         stmt = select(Reservation).where(get_overlap_condition(request.check_in, request.check_out)).with_for_update()
         result = await session.execute(stmt)
         overlapping = result.scalars().first()
@@ -143,6 +144,7 @@ async def book_cash(request: BookCashRequest, background_tasks: BackgroundTasks,
     amount_paise = nights * settings.RESORT_PRICE_PER_NIGHT_PAISE
 
     try:
+        await session.execute(text("SELECT pg_advisory_xact_lock(1001)"))
         stmt = select(Reservation).where(get_overlap_condition(request.check_in, request.check_out)).with_for_update()
         result = await session.execute(stmt)
         overlapping = result.scalars().first()

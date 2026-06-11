@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, BackgroundTasks
 from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, text, and_
 from datetime import datetime, timezone
 import hmac
 import hashlib
@@ -94,7 +94,7 @@ async def verify_payment(request: Request, background_tasks: BackgroundTasks, se
             hashlib.sha256
         ).hexdigest()
 
-    if not hmac.compare_digest(expected_signature, razorpay_signature):
+    if not razorpay_signature or not hmac.compare_digest(expected_signature, razorpay_signature):
         return Response(status_code=400, content="Signature mismatch")
 
     # If frontend callback, we assume it's captured
@@ -102,11 +102,26 @@ async def verify_payment(request: Request, background_tasks: BackgroundTasks, se
         event = "payment.captured"
 
     if event == "payment.captured":
+        await session.execute(text("SELECT pg_advisory_xact_lock(1001)"))
         stmt = select(Reservation).where(Reservation.razorpay_order_id == razorpay_order_id)
         result = await session.execute(stmt)
         res = result.scalars().first()
         
         if res and res.status != "confirmed":
+            if res.status == "expired":
+                from app.routers.bookings import get_overlap_condition
+                overlap_stmt = select(Reservation).where(
+                    and_(
+                        Reservation.id != res.id,
+                        get_overlap_condition(res.check_in, res.check_out)
+                    )
+                )
+                overlap_result = await session.execute(overlap_stmt)
+                if overlap_result.scalars().first():
+                    res.status = "failed"
+                    await session.commit()
+                    return Response(status_code=200, content="OK - Refund needed")
+                    
             res.status = "confirmed"
             res.confirmed_at = datetime.now(timezone.utc)
             res.razorpay_payment_id = razorpay_payment_id

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_, and_, func
 from datetime import datetime, timezone, timedelta, date
@@ -136,7 +136,7 @@ async def get_status(reservation_id: uuid.UUID, session: AsyncSession = Depends(
     return {"status": res.status}
 
 @router.post("/book-cash")
-async def book_cash(request: BookCashRequest, session: AsyncSession = Depends(get_session)):
+async def book_cash(request: BookCashRequest, background_tasks: BackgroundTasks, session: AsyncSession = Depends(get_session)):
     nights = (request.check_out - request.check_in).days
     if nights <= 0:
         raise HTTPException(status_code=400, detail="Check-out must be after check-in")
@@ -171,8 +171,27 @@ async def book_cash(request: BookCashRequest, session: AsyncSession = Depends(ge
         try:
             from app.services.whatsapp_service import send_booking_confirmation
             from app.services.email_service import send_invoice_email
-            # send_booking_confirmation(request.guest_phone, request.guest_name, f"{request.check_in} to {request.check_out}", booking_ref, amount_paise)
-            # send_invoice_email(request.guest_email, request.guest_name, {"ref": booking_ref, "dates": f"{request.check_in} to {request.check_out}"}, True)
+            
+            background_tasks.add_task(
+                send_booking_confirmation,
+                phone=request.guest_phone,
+                name=request.guest_name,
+                dates=f"{request.check_in} to {request.check_out}",
+                booking_ref=booking_ref,
+                amount=amount_paise
+            )
+            
+            background_tasks.add_task(
+                send_invoice_email,
+                to=request.guest_email,
+                name=request.guest_name,
+                booking_details={
+                    "ref": booking_ref,
+                    "dates": f"{request.check_in} to {request.check_out}",
+                    "amount": amount_paise
+                },
+                success=True
+            )
         except Exception as e:
             pass
             

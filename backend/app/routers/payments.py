@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from datetime import datetime, timezone
@@ -45,7 +45,7 @@ async def create_order(request: CreateOrderRequest, session: AsyncSession = Depe
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/verify-payment")
-async def verify_payment(request: Request, session: AsyncSession = Depends(get_session)):
+async def verify_payment(request: Request, background_tasks: BackgroundTasks, session: AsyncSession = Depends(get_session)):
     body = await request.body()
     try:
         data = json.loads(body)
@@ -114,19 +114,20 @@ async def verify_payment(request: Request, session: AsyncSession = Depends(get_s
             from app.services.whatsapp_service import send_booking_confirmation
             from app.services.email_service import send_invoice_email
             try:
-                import asyncio
-                asyncio.create_task(send_booking_confirmation(
+                background_tasks.add_task(
+                    send_booking_confirmation,
                     phone=res.guest_phone,
                     name=res.guest_name,
                     dates=f"{res.check_in} to {res.check_out}",
                     booking_ref=res.booking_ref,
                     amount=res.amount_paise
-                ))
+                )
             except Exception:
                 pass
                 
             try:
-                send_invoice_email(
+                background_tasks.add_task(
+                    send_invoice_email,
                     to=res.guest_email,
                     name=res.guest_name,
                     booking_details={

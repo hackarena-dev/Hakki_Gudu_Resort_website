@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const EXPERIENCES = [
   {
@@ -58,6 +58,7 @@ const EXPERIENCES = [
 export default function ExperienceSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <section
@@ -89,13 +90,13 @@ export default function ExperienceSection() {
 
         {/* Experience Alternating Showcase */}
         <div className="flex flex-col gap-0 mt-10 lg:mt-16">
-          {EXPERIENCES.map((exp, i) => {
+          {EXPERIENCES.slice(0, expanded ? undefined : 3).map((exp, i) => {
             const isReversed = i % 2 === 1; // Alternate: Image Left / Image Right
 
             return (
               <div
                 key={exp.id}
-                className="border-b border-white/10 last:border-0 py-12 lg:py-20"
+                className="border-b border-white/10 last:border-0 py-8 lg:py-14"
               >
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
                   {/* Image Container */}
@@ -104,7 +105,7 @@ export default function ExperienceSection() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
                     transition={{ duration: 0.9, ease: "easeOut" }}
-                    className={`group relative overflow-hidden aspect-[3/2] w-full max-w-[540px] mx-auto shadow-2xl border border-white/5 ${
+                    className={`group relative overflow-hidden aspect-[3/2] w-full max-w-[480px] mx-auto shadow-2xl border border-white/5 ${
                       isReversed ? "lg:order-2" : ""
                     }`}
                   >
@@ -166,6 +167,26 @@ export default function ExperienceSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* View Toggle Button */}
+        <div className="text-center mt-12 lg:mt-16">
+          <button
+            onClick={() => {
+              if (expanded) {
+                const section = document.getElementById("experiences");
+                if (section) {
+                  section.scrollIntoView({ behavior: "smooth" });
+                }
+                setTimeout(() => setExpanded(false), 300);
+              } else {
+                setExpanded(true);
+              }
+            }}
+            className="btn-outline border-[#C9A96E]/40 text-[#C9A96E]"
+          >
+            <span>{expanded ? "Show Less" : "Explore All Experiences"}</span>
+          </button>
         </div>
       </div>
     </section>

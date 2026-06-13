@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChevronLeft, Users, Calendar, Home, MessageSquare,
-  Check, Star, Minus, Plus, Leaf, Wifi, Coffee, Utensils, Waves
+  ChevronLeft, Users, Calendar, MessageSquare,
+  Check, Star, Minus, Plus, Leaf, Coffee, Waves,
+  CreditCard, Coins, Loader2, AlertTriangle
 } from "lucide-react";
+import { apiService, UnavailableRange } from "../../lib/api";
 
 /* ── Types ── */
 type Room = {
@@ -67,12 +69,27 @@ const ROOMS: Room[] = [
   },
 ];
 
-const STEPS = ["Dates & Guests", "Choose Room", "Your Details", "Confirm"];
+const STEPS = ["Dates & Guests", "Choose Room", "Your Details", "Confirm & Pay"];
 
 function getNights(checkin: string, checkout: string) {
   if (!checkin || !checkout) return 0;
   const d1 = new Date(checkin), d2 = new Date(checkout);
   return Math.max(0, Math.round((d2.getTime() - d1.getTime()) / 86400000));
+}
+
+// Dynamically load Razorpay SDK script
+function loadRazorpayScript(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 }
 
 export default function BookingPage() {
@@ -81,7 +98,20 @@ export default function BookingPage() {
     checkin: "", checkout: "", adults: 2, children: 0,
     room: "", name: "", email: "", phone: "", requests: "",
   });
+
+  // API Integration States
+  const [unavailableRanges, setUnavailableRanges] = useState<UnavailableRange[]>([]);
+  const [loadingAvailability, setLoadingAvailability] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState<string | null>(null);
+  
+  const [paymentMethod, setPaymentMethod] = useState<"online" | "cash">("online");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  
   const [confirmed, setConfirmed] = useState(false);
+  const [bookingRef, setBookingRef] = useState("");
+  const [reservationId, setReservationId] = useState("");
+
   const topRef = useRef<HTMLDivElement>(null);
 
   const selectedRoom = ROOMS.find((r) => r.id === form.room);
@@ -93,35 +123,223 @@ export default function BookingPage() {
   const set = (key: keyof FormData, val: string | number) =>
     setForm((f) => ({ ...f, [key]: val }));
 
+  // Fetch availability when check-in or check-out dates change
+  useEffect(() => {
+    const fetchBlockedDates = async () => {
+      if (!form.checkin) return;
+      
+      setLoadingAvailability(true);
+      setAvailabilityError(null);
+      
+      try {
+        // Parse the month format (YYYY-MM)
+        const checkinMonth = form.checkin.substring(0, 7);
+        const data = await apiService.fetchAvailability(checkinMonth);
+        
+        let combinedRanges = [...data.unavailable_ranges];
+        
+        // If checkout is in a different month, load that month's availability too
+        if (form.checkout) {
+          const checkoutMonth = form.checkout.substring(0, 7);
+          if (checkoutMonth !== checkinMonth) {
+            const extraData = await apiService.fetchAvailability(checkoutMonth);
+            combinedRanges = [...combinedRanges, ...extraData.unavailable_ranges];
+          }
+        }
+        
+        setUnavailableRanges(combinedRanges);
+      } catch (err: any) {
+        setAvailabilityError("Unable to retrieve calendar availability. Please check your connection.");
+      } finally {
+        setLoadingAvailability(false);
+      }
+    };
+
+    fetchBlockedDates();
+  }, [form.checkin, form.checkout]);
+
+  // Check if selected range overlaps with any blocked dates
+  const isDateRangeOverlapping = () => {
+    if (!form.checkin || !form.checkout) return false;
+    
+    const checkinDate = new Date(form.checkin);
+    const checkoutDate = new Date(form.checkout);
+    
+    return unavailableRanges.some((range) => {
+      const blockedStart = new Date(range.check_in);
+      const blockedEnd = new Date(range.check_out);
+      
+      // Standard date overlap check: start1 < end2 AND end1 > start2
+      return checkinDate < blockedEnd && checkoutDate > blockedStart;
+    });
+  };
+
   const canNext = () => {
-    if (step === 0) return form.checkin && form.checkout && nights > 0;
+    if (step === 0) {
+      return (
+        form.checkin &&
+        form.checkout &&
+        nights > 0 &&
+        !isDateRangeOverlapping() &&
+        !loadingAvailability
+      );
+    }
     if (step === 1) return !!form.room;
-    if (step === 2) return form.name && form.email && form.phone;
+    if (step === 2) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return (
+        form.name.trim().length >= 2 &&
+        emailRegex.test(form.email) &&
+        form.phone.trim().length >= 10 &&
+        form.phone.trim().length <= 15
+      );
+    }
     return true;
   };
 
-  const next = () => {
+  const next = async () => {
     if (!canNext()) return;
-    if (step === 3) { setConfirmed(true); return; }
+    
+    // If we are on the final confirmation step, run checkout logic
+    if (step === 3) {
+      handleCheckout();
+      return;
+    }
+    
     setStep((s) => s + 1);
     topRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  const back = () => { setStep((s) => Math.max(0, s - 1)); topRef.current?.scrollIntoView({ behavior: "smooth" }); };
 
-  if (confirmed) return <ConfirmationScreen form={form} room={selectedRoom!} nights={nights} total={total} />;
+  const back = () => {
+    setStep((s) => Math.max(0, s - 1));
+    setSubmitError(null);
+    topRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Main payment and checkout implementation
+  const handleCheckout = async () => {
+    setSubmitting(true);
+    setSubmitError(null);
+
+    const payload = {
+      check_in: form.checkin,
+      check_out: form.checkout,
+      guest_name: form.name,
+      guest_email: form.email,
+      guest_phone: form.phone,
+      num_guests: form.adults + form.children,
+    };
+
+    if (paymentMethod === "cash") {
+      // Direct Cash Booking
+      try {
+        const response = await apiService.bookCash(payload);
+        setBookingRef(response.booking_ref);
+        setReservationId(response.reservation_id);
+        setConfirmed(true);
+      } catch (err: any) {
+        setSubmitError(err.message || "Failed to confirm cash booking. Please try again.");
+      } finally {
+        setSubmitting(false);
+      }
+    } else {
+      // Online Payment via Razorpay
+      try {
+        // Step 1: Create room hold
+        const holdRes = await apiService.createHold(payload);
+        const resId = holdRes.reservation_id;
+        setReservationId(resId);
+
+        // Step 2: Create Razorpay Order
+        const orderRes = await apiService.createOrder(resId);
+
+        // Step 3: Load Razorpay SDK Script
+        const scriptLoaded = await loadRazorpayScript();
+        if (!scriptLoaded) {
+          throw new Error("Unable to load payment portal script. Check your internet connection.");
+        }
+
+        // Step 4: Open Razorpay checkout overlay
+        const options = {
+          key: orderRes.key_id,
+          amount: orderRes.amount_paise,
+          currency: "INR",
+          name: "Hakki Gudu Resort",
+          description: "Private Forest sanctuary stay booking",
+          order_id: orderRes.razorpay_order_id,
+          image: "/logo.png",
+          handler: async function (paymentResponse: any) {
+            setSubmitting(true);
+            try {
+              // Step 5: Verify payment signature
+              await apiService.verifyPayment({
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+              });
+              
+              setBookingRef(`RST-${new Date().getFullYear()}-PAID`);
+              setConfirmed(true);
+            } catch (verifyErr: any) {
+              setSubmitError("Payment was successful but verification failed. Please contact support.");
+            } finally {
+              setSubmitting(false);
+            }
+          },
+          prefill: {
+            name: form.name,
+            email: form.email,
+            contact: form.phone,
+          },
+          notes: {
+            reservation_id: resId,
+          },
+          theme: {
+            color: "#2F4F3E", // Custom Forest Green theme matching the resort
+          },
+          modal: {
+            ondismiss: function () {
+              setSubmitting(false);
+              setSubmitError("Payment window was closed. Stays are held for 10 minutes.");
+            },
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      } catch (err: any) {
+        setSubmitError(err.message || "Failed to initialize secure checkout. Please try again.");
+        setSubmitting(false);
+      }
+    }
+  };
+
+  if (confirmed) {
+    return (
+      <ConfirmationScreen
+        form={form}
+        room={selectedRoom!}
+        nights={nights}
+        total={total}
+        bookingRef={bookingRef}
+        reservationId={reservationId}
+        paymentMethod={paymentMethod}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F2]" ref={topRef}>
       {/* ── Booking Hero ── */}
       <div className="relative h-52 md:h-64 overflow-hidden">
-        <Image src="/hero.png" alt="Hakki Goodu booking" fill className="object-cover object-center" />
+        <Image src="/hero.png" alt="Hakki Goodu booking" fill className="object-cover object-center" priority />
         <div className="absolute inset-0 bg-[#1e3329]/80" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-5">
           <Link href="/" className="absolute top-5 left-5 md:left-10 flex items-center gap-2 text-white/70 hover:text-white transition-colors text-xs tracking-widest uppercase">
             <ChevronLeft size={14} /> Back to Home
           </Link>
           <p className="section-label text-[#B98958] mb-3">Private Nature Retreat</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "'Playfair Display', serif", color: '#ffffff' }}>
+          <h1 className="text-3xl md:text-4xl font-bold text-white font-serif">
             Reserve Your Nest
           </h1>
         </div>
@@ -156,6 +374,17 @@ export default function BookingPage() {
 
       {/* ── Main Content ── */}
       <div className="container-luxury py-10 lg:py-14">
+        
+        {submitError && (
+          <div className="max-w-4xl mx-auto mb-8 p-4 bg-[#B56A4A]/10 border border-[#B56A4A]/30 text-[#B56A4A] text-sm flex items-start gap-2.5">
+            <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
+            <div>
+              <h4 className="font-bold mb-0.5">Booking Error</h4>
+              <p>{submitError}</p>
+            </div>
+          </div>
+        )}
+
         <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 items-start">
           {/* Left — Step Content */}
           <div>
@@ -165,19 +394,43 @@ export default function BookingPage() {
                 initial={{ opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -24 }}
-                transition={{ duration: 0.4, ease: "easeOut" as const }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                {step === 0 && <StepDates form={form} set={set} nights={nights} />}
+                {step === 0 && (
+                  <StepDates
+                    form={form}
+                    set={set}
+                    nights={nights}
+                    loading={loadingAvailability}
+                    error={availabilityError}
+                    isOverlapping={isDateRangeOverlapping()}
+                  />
+                )}
                 {step === 1 && <StepRooms form={form} set={set} rooms={ROOMS} />}
                 {step === 2 && <StepDetails form={form} set={set} />}
-                {step === 3 && <StepConfirm form={form} room={selectedRoom!} nights={nights} subtotal={subtotal} tax={tax} total={total} />}
+                {step === 3 && (
+                  <StepConfirm
+                    form={form}
+                    room={selectedRoom!}
+                    nights={nights}
+                    subtotal={subtotal}
+                    tax={tax}
+                    total={total}
+                    paymentMethod={paymentMethod}
+                    setPaymentMethod={setPaymentMethod}
+                  />
+                )}
               </motion.div>
             </AnimatePresence>
 
             {/* Navigation */}
             <div className="flex items-center justify-between mt-10 pt-7 border-t border-[#8B5A3C]/12">
               {step > 0 ? (
-                <button onClick={back} className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#8B5A3C] hover:text-[#2F4F3E] transition-colors">
+                <button
+                  onClick={back}
+                  disabled={submitting}
+                  className="flex items-center gap-2 text-xs tracking-[0.2em] uppercase text-[#8B5A3C] hover:text-[#2F4F3E] transition-colors disabled:opacity-40"
+                >
                   <ChevronLeft size={14} /> Back
                 </button>
               ) : (
@@ -185,10 +438,19 @@ export default function BookingPage() {
               )}
               <button
                 onClick={next}
-                disabled={!canNext()}
-                className="px-10 py-3.5 bg-[#8B5A3C] text-white text-[0.67rem] tracking-[0.25em] uppercase font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#A9724F] transition-all duration-400"
+                disabled={!canNext() || submitting}
+                className="px-10 py-3.5 bg-[#8B5A3C] text-white text-[0.67rem] tracking-[0.25em] uppercase font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-[#A9724F] transition-all duration-400 flex items-center gap-2 cursor-pointer"
               >
-                {step === 3 ? "Confirm Reservation" : "Continue"}
+                {submitting ? (
+                  <>
+                    <Loader2 size={13} className="animate-spin" />
+                    <span>Processing...</span>
+                  </>
+                ) : step === 3 ? (
+                  paymentMethod === "cash" ? "Confirm Cash Booking" : "Proceed to Payment"
+                ) : (
+                  "Continue"
+                )}
               </button>
             </div>
           </div>
@@ -204,14 +466,34 @@ export default function BookingPage() {
 }
 
 /* ═══ STEP 1: Dates & Guests ═══ */
-function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormData, v: string | number) => void; nights: number }) {
+function StepDates({
+  form,
+  set,
+  nights,
+  loading,
+  error,
+  isOverlapping,
+}: {
+  form: FormData;
+  set: (k: keyof FormData, v: string | number) => void;
+  nights: number;
+  loading: boolean;
+  error: string | null;
+  isOverlapping: boolean;
+}) {
   const today = new Date().toISOString().split("T")[0];
   return (
     <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2 font-serif">
         When Are You Visiting?
       </h2>
       <p className="text-sm text-[#8B5A3C]/60 mb-8">Select your dates and number of guests.</p>
+
+      {error && (
+        <div className="mb-6 p-4 bg-[#B56A4A]/10 border border-[#B56A4A]/20 text-xs text-[#B56A4A]">
+          {error}
+        </div>
+      )}
 
       {/* Date Pickers */}
       <div className="grid sm:grid-cols-2 gap-5 mb-8">
@@ -234,15 +516,36 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
         ))}
       </div>
 
-      {/* Nights display */}
-      {nights > 0 && (
+      {/* Overlap & Load Alerts */}
+      {loading && (
+        <div className="flex items-center gap-2 mb-8 text-xs text-[#8B5A3C]">
+          <Loader2 size={13} className="animate-spin text-[#2F4F3E]" />
+          Checking resort availability...
+        </div>
+      )}
+
+      {isOverlapping && !loading && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-start gap-3 mb-8 p-4 bg-[#B56A4A]/10 border border-[#B56A4A]/25 text-[#B56A4A]"
+        >
+          <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+          <div className="text-xs">
+            <p className="font-bold uppercase tracking-wider mb-0.5">Dates Unavailable</p>
+            <p className="opacity-95">The selected check-in/check-out range overlaps with a locked or confirmed stay. Please choose another interval.</p>
+          </div>
+        </motion.div>
+      )}
+
+      {nights > 0 && !isOverlapping && !loading && (
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-3 mb-8 p-4 bg-[#2F4F3E]/8 border border-[#2F4F3E]/20"
         >
           <Check size={14} className="text-[#2F4F3E]" />
-          <p className="text-sm text-[#2F4F3E] font-medium">{nights} night{nights !== 1 ? "s" : ""} selected</p>
+          <p className="text-sm text-[#2F4F3E] font-medium">{nights} night{nights !== 1 ? "s" : ""} selected (Dates Available)</p>
         </motion.div>
       )}
 
@@ -258,6 +561,7 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
             </label>
             <div className="flex items-center border border-[#8B5A3C]/20 bg-[#F5F1E8]">
               <button
+                type="button"
                 onClick={() => set(key, Math.max(min, (form[key] as number) - 1))}
                 className="w-11 h-11 flex items-center justify-center text-[#8B5A3C] hover:bg-[#8B5A3C]/10 transition-colors"
               >
@@ -265,6 +569,7 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
               </button>
               <span className="flex-1 text-center text-sm font-medium text-[#2C2C2C]">{form[key]}</span>
               <button
+                type="button"
                 onClick={() => set(key, Math.min(max, (form[key] as number) + 1))}
                 className="w-11 h-11 flex items-center justify-center text-[#8B5A3C] hover:bg-[#8B5A3C]/10 transition-colors"
               >
@@ -282,7 +587,7 @@ function StepDates({ form, set, nights }: { form: FormData; set: (k: keyof FormD
 function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormData, v: string | number) => void; rooms: Room[] }) {
   return (
     <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2 font-serif">
         Choose Your Sanctuary
       </h2>
       <p className="text-sm text-[#8B5A3C]/60 mb-8">All villas are exclusively yours for the duration of your stay.</p>
@@ -313,13 +618,13 @@ function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormDa
               <div className="flex items-start justify-between mb-2">
                 <div>
                   <span className="text-[0.55rem] tracking-[0.3em] uppercase text-[#B56A4A] font-medium">{room.tier}</span>
-                  <h3 className="text-base font-bold text-[#2C2C2C] mt-0.5" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  <h3 className="text-base font-bold text-[#2C2C2C] mt-0.5 font-serif">
                     {room.name}
                   </h3>
                   <p className="text-xs text-[#8B5A3C]/60 mt-0.5">{room.guests}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className="text-lg font-bold text-[#2F4F3E]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  <p className="text-lg font-bold text-[#2F4F3E] font-serif">
                     ₹{room.price.toLocaleString()}
                   </p>
                   <p className="text-[0.58rem] text-[#8B5A3C]/50">per night</p>
@@ -343,7 +648,7 @@ function StepRooms({ form, set, rooms }: { form: FormData; set: (k: keyof FormDa
 function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v: string | number) => void }) {
   return (
     <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2 font-serif">
         Tell Us About You
       </h2>
       <p className="text-sm text-[#8B5A3C]/60 mb-8">Your details are kept private and secure.</p>
@@ -355,7 +660,7 @@ function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v
           { label: "Email Address", key: "email" as const, type: "email", placeholder: "you@example.com" },
         ].map(({ label, key, type, placeholder }) => (
           <div key={key} className={`flex flex-col gap-2 ${key === "email" ? "sm:col-span-2" : ""}`}>
-            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-medium">
+            <label className="text-[0.6rem] tracking-[0.35em] uppercase text-[#8B5A3C] font-semibold">
               {label}
             </label>
             <input
@@ -395,22 +700,38 @@ function StepDetails({ form, set }: { form: FormData; set: (k: keyof FormData, v
   );
 }
 
-/* ═══ STEP 4: Confirmation Preview ═══ */
-function StepConfirm({ form, room, nights, subtotal, tax, total }: {
-  form: FormData; room: Room | undefined; nights: number;
-  subtotal: number; tax: number; total: number;
+/* ═══ STEP 4: Confirmation Preview & Payment Selector ═══ */
+function StepConfirm({
+  form,
+  room,
+  nights,
+  subtotal,
+  tax,
+  total,
+  paymentMethod,
+  setPaymentMethod,
+}: {
+  form: FormData;
+  room: Room;
+  nights: number;
+  subtotal: number;
+  tax: number;
+  total: number;
+  paymentMethod: "online" | "cash";
+  setPaymentMethod: (method: "online" | "cash") => void;
 }) {
   const fmt = (d: string) => d ? new Date(d).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "—";
 
   return (
-    <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-        Review Your Reservation
-      </h2>
-      <p className="text-sm text-[#8B5A3C]/60 mb-8">Please review your details before confirming.</p>
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-2xl md:text-3xl font-bold text-[#2C2C2C] mb-2 font-serif">
+          Review & Confirm
+        </h2>
+        <p className="text-sm text-[#8B5A3C]/60">Please review your stay and select a secure checkout method.</p>
+      </div>
 
-      <div className="flex flex-col gap-5">
-        {/* Stay Details */}
+      <div className="flex flex-col gap-4 border-b border-[#8B5A3C]/10 pb-6">
         {[
           { label: "Check-In", value: fmt(form.checkin) },
           { label: "Check-Out", value: fmt(form.checkout) },
@@ -422,17 +743,65 @@ function StepConfirm({ form, room, nights, subtotal, tax, total }: {
           { label: "Email", value: form.email || "—" },
           ...(form.requests ? [{ label: "Special Requests", value: form.requests }] : []),
         ].map(({ label, value }) => (
-          <div key={label} className="flex gap-4 py-3 border-b border-[#8B5A3C]/10 last:border-0">
-            <span className="w-36 flex-shrink-0 text-xs font-medium text-[#8B5A3C]/60 uppercase tracking-wide">{label}</span>
-            <span className="text-sm text-[#2C2C2C] leading-relaxed">{value}</span>
+          <div key={label} className="flex gap-4 py-1.5">
+            <span className="w-32 flex-shrink-0 text-xs font-semibold text-[#8B5A3C]/60 uppercase tracking-wider">{label}</span>
+            <span className="text-sm text-[#2C2C2C] font-medium leading-relaxed">{value}</span>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 p-4 bg-[#F5F1E8] border border-[#8B5A3C]/15">
-        <p className="text-[0.65rem] text-[#8B5A3C]/60 leading-5">
-          By confirming, you agree to Hakki Goodu&apos;s cancellation policy. Full payment details and confirmation will be sent to your email within 24 hours. No payment is processed at this step.
-        </p>
+      {/* ── Payment Selector Card ── */}
+      <div className="space-y-4">
+        <h4 className="text-[0.65rem] tracking-[0.2em] uppercase text-[#8B5A3C] font-bold">
+          Choose Payment Method
+        </h4>
+        <div className="grid sm:grid-cols-2 gap-4">
+          
+          {/* Online Payment Card */}
+          <div
+            onClick={() => setPaymentMethod("online")}
+            className={`p-5 border cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+              paymentMethod === "online"
+                ? "bg-[#2F4F3E]/6 border-[#2F4F3E] shadow-md"
+                : "bg-white border-[#8B5A3C]/15 hover:border-[#8B5A3C]/30"
+            }`}
+          >
+            <div className={`p-2.5 rounded-full ${paymentMethod === "online" ? "bg-[#2F4F3E]/15 text-[#2F4F3E]" : "bg-[#FAF7F2] text-[#8B5A3C]"}`}>
+              <CreditCard size={18} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-[#2C2C2C]">Pay Securely Online</p>
+              <p className="text-xs text-[#8B5A3C]/60 mt-1 leading-relaxed">
+                Credit/Debit Cards, UPI, Net Banking via secure Razorpay interface.
+              </p>
+            </div>
+          </div>
+
+          {/* Cash Payment Card */}
+          <div
+            onClick={() => setPaymentMethod("cash")}
+            className={`p-5 border cursor-pointer transition-all duration-300 flex items-start gap-4 ${
+              paymentMethod === "cash"
+                ? "bg-[#2F4F3E]/6 border-[#2F4F3E] shadow-md"
+                : "bg-white border-[#8B5A3C]/15 hover:border-[#8B5A3C]/30"
+            }`}
+          >
+            <div className={`p-2.5 rounded-full ${paymentMethod === "cash" ? "bg-[#2F4F3E]/15 text-[#2F4F3E]" : "bg-[#FAF7F2] text-[#8B5A3C]"}`}>
+              <Coins size={18} />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-[#2C2C2C]">Pay Cash On-site</p>
+              <p className="text-xs text-[#8B5A3C]/60 mt-1 leading-relaxed">
+                Confirm your stay and settle payment at the resort reception desk.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div className="p-4 bg-[#FAF7F2] border border-[#8B5A3C]/15 text-[0.65rem] text-[#8B5A3C]/70 leading-5">
+        By clicking to confirm your stay, you agree to Hakki Goodu nature retreat's terms and cancellation policies. A confirmation copy will be sent to <strong>{form.email}</strong>.
       </div>
     </div>
   );
@@ -461,7 +830,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
           <p className="text-[0.58rem] tracking-[0.3em] text-[#B98958] uppercase mb-0.5">
             {room?.tier || "Your Stay"}
           </p>
-          <p className="text-base font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+          <p className="text-base font-bold text-white leading-tight font-serif">
             {room?.name || "Select a villa to continue"}
           </p>
         </div>
@@ -507,7 +876,7 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
             </div>
             <div className="flex justify-between text-sm font-semibold text-[#2C2C2C] pt-3 border-t border-[#8B5A3C]/10">
               <span>Total</span>
-              <span className="text-[#2F4F3E]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <span className="text-[#2F4F3E] font-serif">
                 ₹{total.toLocaleString()}
               </span>
             </div>
@@ -539,16 +908,29 @@ function BookingSummary({ form, room, nights, subtotal, tax, total }: {
 }
 
 /* ═══ CONFIRMATION SCREEN ═══ */
-function ConfirmationScreen({ form, room, nights, total }: {
-  form: FormData; room: Room; nights: number; total: number;
+function ConfirmationScreen({
+  form,
+  room,
+  nights,
+  total,
+  bookingRef,
+  reservationId,
+  paymentMethod,
+}: {
+  form: FormData;
+  room: Room;
+  nights: number;
+  total: number;
+  bookingRef: string;
+  reservationId: string;
+  paymentMethod: "online" | "cash";
 }) {
-  const ref = `TNR-${Date.now().toString(36).toUpperCase()}`;
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex items-center justify-center p-6">
       <motion.div
         initial={{ opacity: 0, scale: 0.94 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" as const }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className="bg-white border border-[#8B5A3C]/15 max-w-lg w-full p-10 text-center shadow-2xl"
       >
         {/* Check circle */}
@@ -561,21 +943,42 @@ function ConfirmationScreen({ form, room, nights, total }: {
           <Check size={28} className="text-white" strokeWidth={2.5} />
         </motion.div>
 
-        <h2 className="text-3xl font-bold text-[#2C2C2C] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
-          Request Received!
+        <h2 className="text-3xl font-bold text-[#2C2C2C] mb-3 font-serif">
+          Reservation Success!
         </h2>
+        
         <p className="text-sm text-[#8B5A3C]/65 leading-relaxed mb-8">
-          Thank you, <strong>{form.name}</strong>. Your reservation request for{" "}
-          <strong>{room.name}</strong> has been received. Our team will contact you at{" "}
-          <strong>{form.email}</strong> within 24 hours to confirm your stay.
+          Thank you, <strong>{form.name}</strong>. Your sanctuary reservation for{" "}
+          <strong>{room.name}</strong> has been secured. 
+          {paymentMethod === "cash" ? (
+             <span> Settlement is scheduled for cash payment upon check-in.</span>
+          ) : (
+             <span> Online transaction has been authorized successfully.</span>
+          )}
+          {" "}A invoice detailing your stay has been emailed to <strong>{form.email}</strong>.
         </p>
 
-        <div className="bg-[#F5F1E8] p-5 mb-8">
-          <p className="text-[0.6rem] tracking-[0.3em] uppercase text-[#8B5A3C]/60 mb-3">Reservation Reference</p>
-          <p className="text-xl font-bold text-[#2F4F3E] tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
-            {ref}
-          </p>
-          <p className="text-xs text-[#8B5A3C]/50 mt-2">{nights} nights · ₹{total.toLocaleString()} total</p>
+        <div className="bg-[#F5F1E8] p-5 mb-8 text-left space-y-3">
+          {paymentMethod === "cash" && bookingRef && (
+            <div>
+              <p className="text-[0.55rem] tracking-[0.2em] uppercase text-[#8B5A3C]/60 mb-0.5">Booking Reference</p>
+              <p className="text-base font-bold text-[#2F4F3E] font-serif tracking-wider select-all">
+                {bookingRef}
+              </p>
+            </div>
+          )}
+          {reservationId && (
+            <div>
+              <p className="text-[0.55rem] tracking-[0.2em] uppercase text-[#8B5A3C]/60 mb-0.5">Transaction ID</p>
+              <p className="text-xs font-bold text-[#2C2C2C] select-all">
+                {reservationId}
+              </p>
+            </div>
+          )}
+          <div>
+            <p className="text-[0.55rem] tracking-[0.2em] uppercase text-[#8B5A3C]/60 mb-0.5">Summary</p>
+            <p className="text-xs text-[#8B5A3C]/80 font-medium">{nights} nights · ₹{total.toLocaleString()} total</p>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -591,11 +994,10 @@ function ConfirmationScreen({ form, room, nights, total }: {
             rel="noopener noreferrer"
             className="px-8 py-3 bg-[#8B5A3C] text-white text-xs tracking-[0.2em] uppercase font-medium hover:bg-[#A9724F] transition-all duration-400"
           >
-            WhatsApp Us
+            WhatsApp Support
           </a>
         </div>
       </motion.div>
     </div>
   );
 }
-
